@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Construction Tracker — Design Gallery</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f4f4f4;
+      color: #111;
+    }
+
+    header {
+      background: #0076C0;
+      color: #fff;
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 2rem;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      max-width: 400px;
+      line-height: 1.5;
+    }
+
+    .flag-bar {
+      height: 5px;
+      background: repeating-linear-gradient(
+        90deg,
+        #0076C0 0px, #0076C0 33%, #fff 33%, #fff 34%,
+        #0076C0 34%, #0076C0 66%, #fff 66%, #fff 67%,
+        #0076C0 67%, #0076C0 100%
+      );
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: #ddd;
+      padding: 1px;
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      border: 1px solid #ddd;
+    }
+
+    .card {
+      background: #fff;
+      padding: 1.4rem 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: background 0.15s;
+      min-height: 140px;
+    }
+
+    .card:hover {
+      background: #e8f4fd;
+    }
+
+    .card:hover .num {
+      color: #0076C0;
+    }
+
+    .card.final {
+      background: #0076C0;
+      color: #fff;
+    }
+
+    .card.final:hover {
+      background: #005fa3;
+    }
+
+    .card.final .num {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .card.final .title {
+      color: #fff;
+    }
+
+    .card.final .desc {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #aaa;
+      text-transform: uppercase;
+    }
+
+    .title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .desc {
+      font-size: 0.78rem;
+      color: #666;
+      line-height: 1.4;
+      margin-top: auto;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Chicago Construction Tracker<br>Design Iterations</h1>
+  </div>
+  <p>25 versions of a public-facing construction site dashboard for the City of Chicago — from raw structure to final design.</p>
+</header>
+<div class="flag-bar"></div>
+
+<div class="gallery">
+
+  <a class="card" href="pages/v01.html">
+    <span class="num">01</span>
+    <span class="title">Raw Text</span>
+    <span class="desc">Unstyled HTML — plain data, no CSS</span>
+  </a>
+
+  <a class="card" href="pages/v02.html">
+    <span class="num">02</span>
+    <span class="title">Basic Structure</span>
+    <span class="desc">Semantic headings and sections added</span>
+  </a>
+
+  <a class="card" href="pages/v03.html">
+    <span class="num">03</span>
+    <span class="title">First Styles</span>
+    <span class="desc">CSS baseline — clean white, readable fonts</span>
+  </a>
+
+  <a class="card" href="pages/v04.html">
+    <span class="num">04</span>
+    <span class="title">Chicago Palette</span>
+    <span class="desc">City flag colors introduced</span>
+  </a>
+
+  <a class="card" href="pages/v05.html">
+    <span class="num">05</span>
+    <span class="title">Card Grid</span>
+    <span class="desc">Each construction site becomes a card</span>
+  </a>
+
+  <a class="card" href="pages/v06.html">
+    <span class="num">06</span>
+    <span class="title">Status System</span>
+    <span class="desc">Color-coded badges for project status</span>
+  </a>
+
+  <a class="card" href="pages/v07.html">
+    <span class="num">07</span>
+    <span class="title">Map Hero</span>
+    <span class="desc">Placeholder map as the page focal point</span>
+  </a>
+
+  <a class="card" href="pages/v08.html">
+    <span class="num">08</span>
+    <span class="title">Navigation</span>
+    <span class="desc">Header with city branding and nav bar</span>
+  </a>
+
+  <a class="card" href="pages/v09.html">
+    <span class="num">09</span>
+    <span class="title">Filter UI</span>
+    <span class="desc">Category and status filter controls</span>
+  </a>
+
+  <a class="card" href="pages/v10.html">
+    <span class="num">10</span>
+    <span class="title">Timeline View</span>
+    <span class="desc">Horizontal timeline per project</span>
+  </a>
+
+  <a class="card" href="pages/v11.html">
+    <span class="num">11</span>
+    <span class="title">Data Table</span>
+    <span class="desc">Tabular layout for side-by-side comparison</span>
+  </a>
+
+  <a class="card" href="pages/v12.html">
+    <span class="num">12</span>
+    <span class="title">Icon Language</span>
+    <span class="desc">Icons per construction type</span>
+  </a>
+
+  <a class="card" href="pages/v13.html">
+    <span class="num">13</span>
+    <span class="title">Search First</span>
+    <span class="desc">Search bar as the primary interface</span>
+  </a>
+
+  <a class="card" href="pages/v14.html">
+    <span class="num">14</span>
+    <span class="title">Hero Moment</span>
+    <span class="desc">Full-width city photography hero section</span>
+  </a>
+
+  <a class="card" href="pages/v15.html">
+    <span class="num">15</span>
+    <span class="title">Sidebar Layout</span>
+    <span class="desc">Persistent left-side filter panel</span>
+  </a>
+
+  <a class="card" href="pages/v16.html">
+    <span class="num">16</span>
+    <span class="title">Responsive Grid</span>
+    <span class="desc">Mobile-ready card grid layout</span>
+  </a>
+
+  <a class="card" href="pages/v17.html">
+    <span class="num">17</span>
+    <span class="title">Dark Theme</span>
+    <span class="desc">Night-mode color scheme variant</span>
+  </a>
+
+  <a class="card" href="pages/v18.html">
+    <span class="num">18</span>
+    <span class="title">At-a-Glance Stats</span>
+    <span class="desc">KPI summary row above the content</span>
+  </a>
+
+  <a class="card" href="pages/v19.html">
+    <span class="num">19</span>
+    <span class="title">Progress Indicators</span>
+    <span class="desc">Visual completion bars per project</span>
+  </a>
+
+  <a class="card" href="pages/v20.html">
+    <span class="num">20</span>
+    <span class="title">Micro-interactions</span>
+    <span class="desc">Hover and focus effects throughout</span>
+  </a>
+
+  <a class="card" href="pages/v21.html">
+    <span class="num">21</span>
+    <span class="title">Motion</span>
+    <span class="desc">Subtle entrance animations on scroll</span>
+  </a>
+
+  <a class="card" href="pages/v22.html">
+    <span class="num">22</span>
+    <span class="title">Mobile-First</span>
+    <span class="desc">Phone-optimized compact layout</span>
+  </a>
+
+  <a class="card" href="pages/v23.html">
+    <span class="num">23</span>
+    <span class="title">Accessibility</span>
+    <span class="desc">High contrast, ARIA-aware design pass</span>
+  </a>
+
+  <a class="card" href="pages/v24.html">
+    <span class="num">24</span>
+    <span class="title">Brand Refinement</span>
+    <span class="desc">Polished Chicago visual identity</span>
+  </a>
+
+  <a class="card final" href="pages/v25.html">
+    <span class="num">25</span>
+    <span class="title">Final Design</span>
+    <span class="desc">Complete, production-ready landing page</span>
+  </a>
+
+</div>
+
+<footer>Chicago Construction Tracker &mdash; Design Process Gallery</footer>
+
+</body>
+</html>

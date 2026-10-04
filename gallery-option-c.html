@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Construction Tracker — Design Gallery</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #FAFBFF;
+      color: #0D1F35;
+      min-height: 100vh;
+    }
+
+    /* Chicago flag — two horizontal blue stripes */
+    .flag-bar {
+      height: 5px;
+      background: #0076C0;
+      position: relative;
+    }
+    .flag-bar + .flag-gap { height: 14px; background: #fff; }
+    .flag-bar.lower { height: 5px; }
+
+    header {
+      border-bottom: 1px solid #DDE4F0;
+      padding: 2.5rem 6vw 2rem;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .header-left h1 {
+      font-size: 0.65rem;
+      font-weight: normal;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #0076C0;
+      margin-bottom: 0.4rem;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .header-left p {
+      font-size: 2rem;
+      font-style: italic;
+      color: #0D1F35;
+      font-weight: normal;
+      line-height: 1.15;
+    }
+
+    .header-stars {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      margin-top: 0.6rem;
+    }
+
+    .star {
+      color: #E31837;
+      font-size: 0.7rem;
+    }
+
+    .header-right {
+      font-size: 0.72rem;
+      color: #8BA0BC;
+      text-align: right;
+      letter-spacing: 0.05em;
+      line-height: 2;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .list {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 5vw;
+    }
+
+    .entry {
+      display: grid;
+      grid-template-columns: 3rem 1fr auto;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid #DDE4F0;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.15s;
+    }
+
+    .entry:hover {
+      border-bottom-color: #0076C0;
+      background: none;
+    }
+
+    .entry:hover .entry-num {
+      color: #0076C0;
+    }
+
+    .entry:hover .entry-title {
+      color: #0076C0;
+    }
+
+    .entry:hover .entry-arrow {
+      color: #0076C0;
+    }
+
+    .entry.final {
+      border-bottom: 2px solid #E31837;
+    }
+
+    .entry.final .entry-num {
+      color: #E31837;
+    }
+
+    .entry.final .entry-title {
+      color: #0D1F35;
+      font-style: italic;
+    }
+
+    .entry-num {
+      font-size: 0.7rem;
+      color: #B8C8DA;
+      letter-spacing: 0.05em;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      padding-top: 0.15rem;
+      font-weight: 600;
+    }
+
+    .entry-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .entry-title {
+      font-size: 1.05rem;
+      color: #0D1F35;
+      font-style: normal;
+      font-weight: normal;
+      transition: color 0.15s;
+    }
+
+    .entry-desc {
+      font-size: 0.78rem;
+      color: #8BA0BC;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-style: normal;
+    }
+
+    .entry-arrow {
+      font-size: 0.8rem;
+      color: #C8D8E8;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      transition: color 0.15s;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #B8C8DA;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="flag-bar"></div>
+<div class="flag-gap"></div>
+<div class="flag-bar lower"></div>
+
+<header>
+  <div class="header-left">
+    <h1>Design Gallery</h1>
+    <p>Chicago Construction<br>Tracker</p>
+    <div class="header-stars">
+      <span class="star">✦</span>
+      <span class="star">✦</span>
+      <span class="star">✦</span>
+      <span class="star">✦</span>
+    </div>
+  </div>
+  <div class="header-right">
+    25 versions<br>
+    City of Chicago
+  </div>
+</header>
+
+<div class="list">
+
+  <a class="entry" href="pages/v01.html">
+    <span class="entry-num">01</span>
+    <div class="entry-body">
+      <span class="entry-title">Raw Text</span>
+      <span class="entry-desc">Unstyled HTML — plain data, no CSS</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v02.html">
+    <span class="entry-num">02</span>
+    <div class="entry-body">
+      <span class="entry-title">Basic Structure</span>
+      <span class="entry-desc">Semantic headings and sections added</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v03.html">
+    <span class="entry-num">03</span>
+    <div class="entry-body">
+      <span class="entry-title">First Styles</span>
+      <span class="entry-desc">CSS baseline — clean white, readable fonts</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v04.html">
+    <span class="entry-num">04</span>
+    <div class="entry-body">
+      <span class="entry-title">Chicago Palette</span>
+      <span class="entry-desc">City flag colors introduced</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v05.html">
+    <span class="entry-num">05</span>
+    <div class="entry-body">
+      <span class="entry-title">Card Grid</span>
+      <span class="entry-desc">Each construction site becomes a card</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v06.html">
+    <span class="entry-num">06</span>
+    <div class="entry-body">
+      <span class="entry-title">Status System</span>
+      <span class="entry-desc">Color-coded badges for project status</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v07.html">
+    <span class="entry-num">07</span>
+    <div class="entry-body">
+      <span class="entry-title">Map Hero</span>
+      <span class="entry-desc">Placeholder map as the page focal point</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v08.html">
+    <span class="entry-num">08</span>
+    <div class="entry-body">
+      <span class="entry-title">Navigation</span>
+      <span class="entry-desc">Header with city branding and nav bar</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v09.html">
+    <span class="entry-num">09</span>
+    <div class="entry-body">
+      <span class="entry-title">Filter UI</span>
+      <span class="entry-desc">Category and status filter controls</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v10.html">
+    <span class="entry-num">10</span>
+    <div class="entry-body">
+      <span class="entry-title">Timeline View</span>
+      <span class="entry-desc">Horizontal timeline per project</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v11.html">
+    <span class="entry-num">11</span>
+    <div class="entry-body">
+      <span class="entry-title">Data Table</span>
+      <span class="entry-desc">Tabular layout for side-by-side comparison</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v12.html">
+    <span class="entry-num">12</span>
+    <div class="entry-body">
+      <span class="entry-title">Icon Language</span>
+      <span class="entry-desc">Icons per construction type</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v13.html">
+    <span class="entry-num">13</span>
+    <div class="entry-body">
+      <span class="entry-title">Search First</span>
+      <span class="entry-desc">Search bar as the primary interface</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v14.html">
+    <span class="entry-num">14</span>
+    <div class="entry-body">
+      <span class="entry-title">Hero Moment</span>
+      <span class="entry-desc">Full-width city photography hero section</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v15.html">
+    <span class="entry-num">15</span>
+    <div class="entry-body">
+      <span class="entry-title">Sidebar Layout</span>
+      <span class="entry-desc">Persistent left-side filter panel</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v16.html">
+    <span class="entry-num">16</span>
+    <div class="entry-body">
+      <span class="entry-title">Responsive Grid</span>
+      <span class="entry-desc">Mobile-ready card grid layout</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v17.html">
+    <span class="entry-num">17</span>
+    <div class="entry-body">
+      <span class="entry-title">Dark Theme</span>
+      <span class="entry-desc">Night-mode color scheme variant</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v18.html">
+    <span class="entry-num">18</span>
+    <div class="entry-body">
+      <span class="entry-title">At-a-Glance Stats</span>
+      <span class="entry-desc">KPI summary row above the content</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v19.html">
+    <span class="entry-num">19</span>
+    <div class="entry-body">
+      <span class="entry-title">Progress Indicators</span>
+      <span class="entry-desc">Visual completion bars per project</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v20.html">
+    <span class="entry-num">20</span>
+    <div class="entry-body">
+      <span class="entry-title">Micro-interactions</span>
+      <span class="entry-desc">Hover and focus effects throughout</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v21.html">
+    <span class="entry-num">21</span>
+    <div class="entry-body">
+      <span class="entry-title">Motion</span>
+      <span class="entry-desc">Subtle entrance animations on scroll</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v22.html">
+    <span class="entry-num">22</span>
+    <div class="entry-body">
+      <span class="entry-title">Mobile-First</span>
+      <span class="entry-desc">Phone-optimized compact layout</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v23.html">
+    <span class="entry-num">23</span>
+    <div class="entry-body">
+      <span class="entry-title">Accessibility</span>
+      <span class="entry-desc">High contrast, ARIA-aware design pass</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry" href="pages/v24.html">
+    <span class="entry-num">24</span>
+    <div class="entry-body">
+      <span class="entry-title">Brand Refinement</span>
+      <span class="entry-desc">Polished Chicago visual identity</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+  <a class="entry final" href="pages/v25.html">
+    <span class="entry-num">25</span>
+    <div class="entry-body">
+      <span class="entry-title">Final Design</span>
+      <span class="entry-desc">Complete, production-ready landing page</span>
+    </div>
+    <span class="entry-arrow">→</span>
+  </a>
+
+</div>
+
+<footer>Chicago Construction Tracker &mdash; Design Process Gallery</footer>
+
+</body>
+</html>

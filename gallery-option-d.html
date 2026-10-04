@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Construction Tracker — Design Gallery</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* "The Grid" — Chicago street grid as layout metaphor.
+       Warm concrete off-white, steel-dark borders, blue on hover. */
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #EDEBE6;
+      color: #1C1917;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1C1917;
+      padding: 2.25rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .header-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #0076C0;
+      font-weight: 700;
+    }
+
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-stat {
+      text-align: center;
+    }
+
+    .stat-n {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.58rem;
+      color: #6B6560;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 2rem;
+      background: #333;
+    }
+
+    /* Grid wrapper */
+    .grid-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 4vw 4rem;
+    }
+
+    /* Phase banners — full-width labels spanning the grid */
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.5rem 0 1rem;
+    }
+
+    .phase-header:first-child {
+      margin-top: 0;
+    }
+
+    .phase-num {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #0076C0;
+      white-space: nowrap;
+    }
+
+    .phase-rule {
+      flex: 1;
+      height: 1px;
+      background: #C8C3BC;
+    }
+
+    .phase-range {
+      font-size: 0.58rem;
+      color: #A09890;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    /* The actual grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border-top: 1px solid #C8C3BC;
+      border-left: 1px solid #C8C3BC;
+    }
+
+    .cell {
+      display: flex;
+      flex-direction: column;
+      padding: 1.4rem 1.25rem 1.2rem;
+      border-right: 1px solid #C8C3BC;
+      border-bottom: 1px solid #C8C3BC;
+      text-decoration: none;
+      color: inherit;
+      background: #EDEBE6;
+      position: relative;
+      transition: background 0.12s, border-color 0.12s;
+      min-height: 110px;
+    }
+
+    .cell:hover {
+      background: #fff;
+      z-index: 1;
+    }
+
+    .cell:hover .cell-num {
+      color: #0076C0;
+    }
+
+    .cell:hover .cell-title {
+      color: #0076C0;
+    }
+
+    .cell:hover::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1.5px solid #0076C0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .cell-num {
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #B0A99F;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+      transition: color 0.12s;
+    }
+
+    .cell-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1C1917;
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+      transition: color 0.12s;
+    }
+
+    .cell-desc {
+      font-size: 0.68rem;
+      color: #8A8078;
+      line-height: 1.4;
+      margin-top: auto;
+    }
+
+    /* Final cell spans full row */
+    .cell.final {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+      min-height: auto;
+      padding: 1.5rem 2rem;
+      background: #0076C0;
+      border-color: #0076C0;
+    }
+
+    .cell.final:hover {
+      background: #005fa3;
+      border-color: #005fa3;
+    }
+
+    .cell.final:hover::after { display: none; }
+
+    .cell.final .cell-num {
+      color: rgba(255,255,255,0.4);
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .cell.final .cell-title {
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .cell.final .cell-desc {
+      color: rgba(255,255,255,0.65);
+      margin-top: 0;
+    }
+
+    .final-body { flex: 1; }
+
+    .final-badge {
+      margin-left: auto;
+      background: #E31837;
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.62rem;
+      color: #A09890;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="header-eyebrow">Design Process</span>
+    <span class="header-title">Chicago Construction Tracker</span>
+  </div>
+  <div class="header-right">
+    <div class="header-stat">
+      <span class="stat-n">25</span>
+      <span class="stat-label">Versions</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-stat">
+      <span class="stat-n">4</span>
+      <span class="stat-label">Phases</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-stat">
+      <span class="stat-n">HTML</span>
+      <span class="stat-label">Static</span>
+    </div>
+  </div>
+</header>
+
+<div class="grid-wrap">
+
+  <div class="phase-header">
+    <span class="phase-num">Phase 1 — Structure</span>
+    <div class="phase-rule"></div>
+    <span class="phase-range">01 – 04</span>
+  </div>
+
+  <div class="grid">
+    <a class="cell" href="pages/v01.html">
+      <span class="cell-num">01</span>
+      <span class="cell-title">Raw Text</span>
+      <span class="cell-desc">Unstyled HTML, plain data, no CSS</span>
+    </a>
+    <a class="cell" href="pages/v02.html">
+      <span class="cell-num">02</span>
+      <span class="cell-title">Basic Structure</span>
+      <span class="cell-desc">Semantic headings and sections</span>
+    </a>
+    <a class="cell" href="pages/v03.html">
+      <span class="cell-num">03</span>
+      <span class="cell-title">First Styles</span>
+      <span class="cell-desc">CSS baseline, readable fonts</span>
+    </a>
+    <a class="cell" href="pages/v04.html">
+      <span class="cell-num">04</span>
+      <span class="cell-title">Chicago Palette</span>
+      <span class="cell-desc">City flag colors introduced</span>
+    </a>
+    <!-- filler cell -->
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+  </div>
+
+  <div class="phase-header">
+    <span class="phase-num">Phase 2 — Layout</span>
+    <div class="phase-rule"></div>
+    <span class="phase-range">05 – 10</span>
+  </div>
+
+  <div class="grid">
+    <a class="cell" href="pages/v05.html">
+      <span class="cell-num">05</span>
+      <span class="cell-title">Card Grid</span>
+      <span class="cell-desc">Sites become cards</span>
+    </a>
+    <a class="cell" href="pages/v06.html">
+      <span class="cell-num">06</span>
+      <span class="cell-title">Status System</span>
+      <span class="cell-desc">Color-coded project badges</span>
+    </a>
+    <a class="cell" href="pages/v07.html">
+      <span class="cell-num">07</span>
+      <span class="cell-title">Map Hero</span>
+      <span class="cell-desc">Map as focal point</span>
+    </a>
+    <a class="cell" href="pages/v08.html">
+      <span class="cell-num">08</span>
+      <span class="cell-title">Navigation</span>
+      <span class="cell-desc">City branding and nav bar</span>
+    </a>
+    <a class="cell" href="pages/v09.html">
+      <span class="cell-num">09</span>
+      <span class="cell-title">Filter UI</span>
+      <span class="cell-desc">Category and status filters</span>
+    </a>
+    <a class="cell" href="pages/v10.html">
+      <span class="cell-num">10</span>
+      <span class="cell-title">Timeline View</span>
+      <span class="cell-desc">Horizontal project timeline</span>
+    </a>
+    <!-- fillers -->
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+  </div>
+
+  <div class="phase-header">
+    <span class="phase-num">Phase 3 — Components</span>
+    <div class="phase-rule"></div>
+    <span class="phase-range">11 – 16</span>
+  </div>
+
+  <div class="grid">
+    <a class="cell" href="pages/v11.html">
+      <span class="cell-num">11</span>
+      <span class="cell-title">Data Table</span>
+      <span class="cell-desc">Tabular comparison view</span>
+    </a>
+    <a class="cell" href="pages/v12.html">
+      <span class="cell-num">12</span>
+      <span class="cell-title">Icon Language</span>
+      <span class="cell-desc">Icons per construction type</span>
+    </a>
+    <a class="cell" href="pages/v13.html">
+      <span class="cell-num">13</span>
+      <span class="cell-title">Search First</span>
+      <span class="cell-desc">Search as primary interface</span>
+    </a>
+    <a class="cell" href="pages/v14.html">
+      <span class="cell-num">14</span>
+      <span class="cell-title">Hero Moment</span>
+      <span class="cell-desc">Full-width city photography</span>
+    </a>
+    <a class="cell" href="pages/v15.html">
+      <span class="cell-num">15</span>
+      <span class="cell-title">Sidebar Layout</span>
+      <span class="cell-desc">Persistent left-side filters</span>
+    </a>
+    <a class="cell" href="pages/v16.html">
+      <span class="cell-num">16</span>
+      <span class="cell-title">Responsive Grid</span>
+      <span class="cell-desc">Mobile-ready layout</span>
+    </a>
+    <!-- fillers -->
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+  </div>
+
+  <div class="phase-header">
+    <span class="phase-num">Phase 4 — Refinement</span>
+    <div class="phase-rule"></div>
+    <span class="phase-range">17 – 24</span>
+  </div>
+
+  <div class="grid">
+    <a class="cell" href="pages/v17.html">
+      <span class="cell-num">17</span>
+      <span class="cell-title">Dark Theme</span>
+      <span class="cell-desc">Night-mode color scheme</span>
+    </a>
+    <a class="cell" href="pages/v18.html">
+      <span class="cell-num">18</span>
+      <span class="cell-title">At-a-Glance Stats</span>
+      <span class="cell-desc">KPI summary row</span>
+    </a>
+    <a class="cell" href="pages/v19.html">
+      <span class="cell-num">19</span>
+      <span class="cell-title">Progress Indicators</span>
+      <span class="cell-desc">Visual completion bars</span>
+    </a>
+    <a class="cell" href="pages/v20.html">
+      <span class="cell-num">20</span>
+      <span class="cell-title">Micro-interactions</span>
+      <span class="cell-desc">Hover and focus effects</span>
+    </a>
+    <a class="cell" href="pages/v21.html">
+      <span class="cell-num">21</span>
+      <span class="cell-title">Motion</span>
+      <span class="cell-desc">Subtle scroll animations</span>
+    </a>
+    <a class="cell" href="pages/v22.html">
+      <span class="cell-num">22</span>
+      <span class="cell-title">Mobile-First</span>
+      <span class="cell-desc">Phone-optimized layout</span>
+    </a>
+    <a class="cell" href="pages/v23.html">
+      <span class="cell-num">23</span>
+      <span class="cell-title">Accessibility</span>
+      <span class="cell-desc">High contrast, ARIA-aware</span>
+    </a>
+    <a class="cell" href="pages/v24.html">
+      <span class="cell-num">24</span>
+      <span class="cell-title">Brand Refinement</span>
+      <span class="cell-desc">Polished Chicago identity</span>
+    </a>
+    <!-- filler -->
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+    <div class="cell" style="background:#E8E5DF; pointer-events:none;"></div>
+  </div>
+
+  <div class="phase-header">
+    <span class="phase-num">Final</span>
+    <div class="phase-rule"></div>
+  </div>
+
+  <div class="grid">
+    <a class="cell final" href="pages/v25.html">
+      <span class="cell-num">25</span>
+      <div class="final-body">
+        <div class="cell-title">Final Design</div>
+        <div class="cell-desc">Complete, production-ready landing page</div>
+      </div>
+      <span class="final-badge">Complete</span>
+    </a>
+  </div>
+
+</div>
+
+<footer>Chicago Construction Tracker &mdash; Design Process Gallery</footer>
+
+</body>
+</html>
