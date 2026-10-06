@@ -47,17 +47,29 @@ is happening, and how long it will last.
 - Gallery (index.html) links to each static version page
 - Target deployment: Vercel
 
+## Concept (expanded)
+Chicago Builds is both a **tracker** and a **community platform**. It surfaces official
+government construction data AND gives residents a channel to report what the city has
+missed — unreported hazards, work outside permitted hours, dangerous conditions,
+or projects not yet in any public database. Community reports are reviewed and shared
+with the relevant city agency.
+
 ## Landing page content structure
 Every version of the landing page should include these content zones:
 
 - **Hero / header image** — A striking visual establishing Chicago identity (skyline, flag,
   construction-site imagery). Can be photo, CSS gradient, SVG illustration, or CSS art.
   Experiment across versions with different treatments.
-- **Mission statement** — 2–3 sentence intro explaining what the tracker is and who it serves.
+- **"Chicago Builds." brand mark** — The site name displayed prominently at the top of
+  every page, styled to match each version's visual language.
+- **Mission statement** — 2–3 sentence intro explaining what the tracker is, who it serves,
+  and that it is a community platform (not just a government data mirror).
 - **Search bar** — Prominent input letting residents find projects by street, neighborhood,
   ZIP code, or keyword.
 - **8 construction categories** — Visual links letting users browse by type of work.
 - **City stats** — High-level numbers showing the scale of Chicago's construction activity.
+- **Community feedback section** — A resident-facing reporting form near the bottom of the
+  page. See the "Community feedback section" spec below.
 
 ## 8 construction categories
 Consolidate all project types into these eight:
@@ -72,6 +84,35 @@ Consolidate all project types into these eight:
 | Parks & Recreation | Chicago Park District projects, trails, fieldhouses |
 | New Development | Private building permits, demolition, new construction |
 | Bridges & Structures | Bridge deck repair, viaducts, overpasses, retaining walls |
+
+## Community feedback section
+Every version of the landing page must include a community reporting section. It is a
+core feature of the site, not optional. Spec:
+
+**Purpose** — Let residents flag anything missing from official city records:
+unreported hazards, dangerous sidewalk/road conditions, construction running outside
+permitted hours, projects not listed in the database, noise/vibration complaints.
+
+**Required elements:**
+- Section header: "See something the city missed?" (or equivalent)
+- Short description: explain this is a community platform, reports go to editors and
+  the relevant city agency, and may be published publicly
+- Report type selector: Unreported hazard · Hours violation · Project missing from
+  database · Road/sidewalk damage · Noise/vibration complaint · General feedback
+- Location field: street address or intersection
+- Description textarea: "What did you observe? Be as specific as possible."
+- Optional contact field: email or phone for follow-up
+- Submit button
+- Disclaimer: "For emergencies call 911. Non-emergency city services: call 311."
+
+**Community impact stats to display alongside the form:**
+- 847 community reports submitted this year
+- 312 escalated to city agencies
+- 94% agency acknowledgment rate
+
+**Style guidance:** The feedback section should match the visual language of each
+version — dark themed for dark pages, clean civic for light pages, minimal for ledger
+pages. It should feel like a natural extension of the page, not a separate widget.
 
 ## City stats to display
 Use these placeholder figures (update when real data is available):
@@ -122,7 +163,7 @@ chosen direction, adding complexity and polish toward the final page.
 
 ## Notes for agents
 - Each version lives at pages/v01.html through pages/v25.html
-- The gallery lives at index.html
+- The gallery lives at gallery-option-c.html
 - When building a new version, review the previous version for continuity
 - Chicago flag palette: blue #0076C0, red #E31837, white #FFFFFF
 - Prefer real-feeling placeholder data (Chicago street names, realistic timelines)
