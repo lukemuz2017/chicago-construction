@@ -47,16 +47,57 @@ is happening, and how long it will last.
 - Gallery (index.html) links to each static version page
 - Target deployment: Vercel
 
+## Landing page content structure
+Every version of the landing page should include these content zones:
+
+- **Hero / header image** — A striking visual establishing Chicago identity (skyline, flag,
+  construction-site imagery). Can be photo, CSS gradient, SVG illustration, or CSS art.
+  Experiment across versions with different treatments.
+- **Mission statement** — 2–3 sentence intro explaining what the tracker is and who it serves.
+- **Search bar** — Prominent input letting residents find projects by street, neighborhood,
+  ZIP code, or keyword.
+- **8 construction categories** — Visual links letting users browse by type of work.
+- **City stats** — High-level numbers showing the scale of Chicago's construction activity.
+
+## 8 construction categories
+Consolidate all project types into these eight:
+
+| Category | Covers |
+|---|---|
+| Roads & Pavement | Resurfacing, pothole repair, curb/gutter, alley paving |
+| Water & Sewer | Water main replacement, sewer repair, flood infrastructure |
+| Transit & CTA | Train station upgrades, bus lane work, track replacement |
+| Highways & Expressways | IDOT/ISTHA expressway and ramp projects |
+| Utilities | ComEd, Peoples Gas, telecom conduit, streetlights |
+| Parks & Recreation | Chicago Park District projects, trails, fieldhouses |
+| New Development | Private building permits, demolition, new construction |
+| Bridges & Structures | Bridge deck repair, viaducts, overpasses, retaining walls |
+
+## City stats to display
+Use these placeholder figures (update when real data is available):
+- **1,247** active projects
+- **28,400+** union workers on-site
+- **389** projects completed this year
+- **77** neighborhoods impacted
+- **$2.4B** in active contracts
+- **12** city agencies involved
+
+## Gallery
+The design gallery lives at `gallery-option-c.html` (settled design). It links to
+`pages/v01.html` through `pages/v25.html`. The `index.html` at root is reserved for
+the actual production landing page when it is ready.
+
 ## Iteration arc — 25 versions
-Each page builds toward the final design. The arc moves from raw structure → visual
-language → layout complexity → interactivity hints → full polish.
+Versions 01–04 are full landing page design explorations — distinct visual directions
+experimenting with hero treatment, layout, and tone. Versions 05–25 iterate on the
+chosen direction, adding complexity and polish toward the final page.
 
 | # | Title | Focus |
 |---|-------|-------|
-| 1 | Raw Text | Unstyled HTML — plain data, no CSS |
-| 2 | Basic Structure | Semantic headings and sections |
-| 3 | First Styles | CSS baseline — clean white, readable fonts |
-| 4 | Chicago Palette | City flag colors introduced |
+| 1 | Bold Editorial | Dark navy hero, SVG skyline silhouette, large italic serif type |
+| 2 | Civic Standard | Sky-blue official header, white floating search card, card grid |
+| 3 | Site Yellow | Amber construction-energy hero, bold sans-serif, tile categories |
+| 4 | White Ledger | Minimal white, giant stat number as hero, clean ledger-style list |
 | 5 | Card Grid | Each construction site as a card |
 | 6 | Status System | Color-coded badges for project status |
 | 7 | Map Hero | Placeholder map as the page focal point |

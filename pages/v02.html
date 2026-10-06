@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Construction Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* v02 — Civic Standard
+       Official but elevated. Sky-blue gradient hero, white floating card with
+       search + mission. Stats in a clean row. Category cards with left accent. */
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #F0F4F8;
+      color: #1a2633;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid #dde4ee;
+      padding: 0 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    /* Mini Chicago flag */
+    .flag-mini {
+      display: flex;
+      flex-direction: column;
+      width: 28px;
+      height: 18px;
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .f-w { flex: 2; background: #fff; border-top: 0.5px solid #eee; }
+    .f-b { flex: 1; background: #0076C0; }
+
+    .topbar-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1a2633;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-name span {
+      font-weight: 400;
+      color: #8BA0BC;
+    }
+
+    .topbar-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .topbar-nav a {
+      font-size: 0.72rem;
+      color: #6B88A8;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .topbar-nav a:hover { color: #0076C0; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(155deg, #0055A5 0%, #0076C0 50%, #0096E0 100%);
+      padding: 4rem 5vw 7rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative diagonal stripe overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.03) 40px,
+        rgba(255,255,255,0.03) 80px
+      );
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 460px;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-left h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-left h1 em {
+      font-style: normal;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      display: block;
+      font-size: 0.55em;
+      letter-spacing: 0;
+      margin-bottom: 0.4rem;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+    }
+
+    .hero-left p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+      max-width: 440px;
+    }
+
+    .hero-flags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .hflag-star { color: #E31837; font-size: 1rem; }
+
+    /* Floating search card */
+    .hero-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .card-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #0076C0;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1a2633;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card-sub {
+      font-size: 0.78rem;
+      color: #8BA0BC;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .search-row {
+      display: flex;
+      border: 1.5px solid #DDE4EE;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .search-row input {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      border: none;
+      font-size: 0.88rem;
+      color: #1a2633;
+      outline: none;
+    }
+
+    .search-row input::placeholder { color: #bbb; }
+
+    .search-row button {
+      background: #0076C0;
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .quick-links {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-link {
+      font-size: 0.68rem;
+      color: #0076C0;
+      background: #EEF5FB;
+      padding: 0.3rem 0.65rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.1s;
+    }
+
+    .quick-link:hover { background: #DDE8F5; }
+
+    /* ── STATS ── */
+    .stats {
+      background: #fff;
+      border-bottom: 1px solid #DDE4EE;
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      padding: 0 5vw;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 2rem 1rem;
+      border-right: 1px solid #DDE4EE;
+      text-align: center;
+    }
+
+    .stat:first-child { padding-left: 0; text-align: left; }
+    .stat:last-child { border-right: none; }
+
+    .stat-n {
+      display: block;
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: #0076C0;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-n.red { color: #E31837; }
+    .stat-n.dark { color: #1a2633; }
+
+    .stat-l {
+      font-size: 0.62rem;
+      color: #8BA0BC;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* ── CATEGORIES ── */
+    .cats {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 5vw;
+    }
+
+    .cats h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a2633;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    .cats-sub {
+      font-size: 0.78rem;
+      color: #8BA0BC;
+      margin-bottom: 2rem;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .cat {
+      background: #fff;
+      border: 1px solid #DDE4EE;
+      border-left: 4px solid #DDE4EE;
+      padding: 1.4rem 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: border-left-color 0.15s, box-shadow 0.15s;
+    }
+
+    .cat:hover {
+      border-left-color: #0076C0;
+      box-shadow: 0 2px 12px rgba(0,118,192,0.1);
+    }
+
+    .cat:hover .cat-name { color: #0076C0; }
+
+    .cat-icon { font-size: 1.4rem; display: block; margin-bottom: 0.3rem; }
+    .cat-name { font-size: 0.85rem; font-weight: 700; color: #1a2633; transition: color 0.15s; }
+    .cat-desc { font-size: 0.7rem; color: #8BA0BC; line-height: 1.45; }
+    .cat-count { font-size: 0.62rem; font-weight: 700; color: #0076C0; margin-top: auto; padding-top: 0.5rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #fff;
+      border-top: 1px solid #DDE4EE;
+      padding: 1.5rem 5vw;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1a2633;
+    }
+
+    .footer-name span { font-weight: 400; color: #8BA0BC; }
+
+    .footer-sep { flex: 1; }
+
+    .footer-right {
+      font-size: 0.62rem;
+      color: #ccc;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="flag-mini">
+      <div class="f-w"></div>
+      <div class="f-b"></div>
+      <div class="f-w"></div>
+      <div class="f-b"></div>
+      <div class="f-w"></div>
+    </div>
+    <span class="topbar-name">Chicago Construction Tracker <span>/ Public Works</span></span>
+  </div>
+  <ul class="topbar-nav">
+    <li><a href="#">Map View</a></li>
+    <li><a href="#">All Projects</a></li>
+    <li><a href="#">Agencies</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>
+        <em>A public window into</em>
+        Chicago's Infrastructure
+      </h1>
+      <p>See every active construction project across the city — from water main replacements on the North Side to CTA improvements downtown — organized, searchable, and updated daily.</p>
+      <div class="hero-flags">
+        <span class="hflag-star">✦</span>
+        <span class="hflag-star">✦</span>
+        <span class="hflag-star">✦</span>
+        <span class="hflag-star">✦</span>
+      </div>
+    </div>
+
+    <!-- Floating search card -->
+    <div class="hero-card">
+      <p class="card-label">Find a project</p>
+      <p class="card-title">What's happening near you?</p>
+      <p class="card-sub">Search by street address, neighborhood, ZIP code, or project type.</p>
+      <div class="search-row">
+        <input type="text" placeholder="e.g. Milwaukee Ave, Logan Square, 60647…" />
+        <button>Search</button>
+      </div>
+      <div class="quick-links">
+        <a class="quick-link" href="#">The Loop</a>
+        <a class="quick-link" href="#">Wicker Park</a>
+        <a class="quick-link" href="#">South Side</a>
+        <a class="quick-link" href="#">I-90/94</a>
+        <a class="quick-link" href="#">Red Line</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <span class="stat-n">1,247</span>
+      <span class="stat-l">Active Projects</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n dark">28,400<span style="font-size:0.6em">+</span></span>
+      <span class="stat-l">Union Workers On-Site</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n red">389</span>
+      <span class="stat-l">Completed This Year</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n dark">$2.4B</span>
+      <span class="stat-l">Active Contracts</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">77</span>
+      <span class="stat-l">Neighborhoods Impacted</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n dark">12</span>
+      <span class="stat-l">City Agencies</span>
+    </div>
+  </div>
+</div>
+
+<!-- Categories -->
+<div class="cats">
+  <h2>Browse by project type</h2>
+  <p class="cats-sub">Select a category to filter all active and upcoming projects</p>
+  <div class="cat-grid">
+    <a class="cat" href="#">
+      <span class="cat-icon">🛣️</span>
+      <span class="cat-name">Roads &amp; Pavement</span>
+      <span class="cat-desc">Resurfacing, pothole repair, curb and alley paving</span>
+      <span class="cat-count">423 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">💧</span>
+      <span class="cat-name">Water &amp; Sewer</span>
+      <span class="cat-desc">Water main replacement, sewer lines, flood infrastructure</span>
+      <span class="cat-count">218 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">🚊</span>
+      <span class="cat-name">Transit &amp; CTA</span>
+      <span class="cat-desc">Train stations, bus lanes, track and platform work</span>
+      <span class="cat-count">94 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">🛤️</span>
+      <span class="cat-name">Highways &amp; Expressways</span>
+      <span class="cat-desc">IDOT and ISTHA expressway and ramp projects</span>
+      <span class="cat-count">61 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">⚡</span>
+      <span class="cat-name">Utilities</span>
+      <span class="cat-desc">ComEd, Peoples Gas, telecom conduit, streetlights</span>
+      <span class="cat-count">187 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">🌳</span>
+      <span class="cat-name">Parks &amp; Recreation</span>
+      <span class="cat-desc">Park District projects, trails, fieldhouse renovations</span>
+      <span class="cat-count">72 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">🏗️</span>
+      <span class="cat-name">New Development</span>
+      <span class="cat-desc">Private building permits, demolition, new construction</span>
+      <span class="cat-count">138 active →</span>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-icon">🌉</span>
+      <span class="cat-name">Bridges &amp; Structures</span>
+      <span class="cat-desc">Bridge decks, viaducts, overpasses, retaining walls</span>
+      <span class="cat-count">54 active →</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="flag-mini">
+    <div class="f-w"></div>
+    <div class="f-b"></div>
+    <div class="f-w"></div>
+    <div class="f-b"></div>
+    <div class="f-w"></div>
+  </div>
+  <span class="footer-name">Chicago Construction Tracker <span>· City of Chicago</span></span>
+  <div class="footer-sep"></div>
+  <span class="footer-right">v02 Civic Standard</span>
+</footer>
+
+</body>
+</html>

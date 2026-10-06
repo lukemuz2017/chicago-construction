@@ -14,13 +14,8 @@
       min-height: 100vh;
     }
 
-    /* Chicago flag — two horizontal blue stripes */
-    .flag-bar {
-      height: 5px;
-      background: #0076C0;
-      position: relative;
-    }
-    .flag-bar + .flag-gap { height: 14px; background: #fff; }
+    .flag-bar { height: 5px; background: #0076C0; }
+    .flag-gap { height: 14px; background: #fff; }
     .flag-bar.lower { height: 5px; }
 
     header {
@@ -57,10 +52,7 @@
       margin-top: 0.6rem;
     }
 
-    .star {
-      color: #E31837;
-      font-size: 0.7rem;
-    }
+    .star { color: #E31837; font-size: 0.7rem; }
 
     .header-right {
       font-size: 0.72rem;
@@ -72,60 +64,104 @@
     }
 
     .list {
-      max-width: 860px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 3rem 5vw;
+      padding: 2.5rem 5vw 3rem;
     }
 
+    /* ── ENTRY ROW ── */
     .entry {
       display: grid;
-      grid-template-columns: 3rem 1fr auto;
-      align-items: baseline;
+      grid-template-columns: 190px 2.5rem 1fr auto;
+      align-items: center;
       gap: 1.5rem;
-      padding: 1.4rem 0;
+      padding: 1rem 0;
       border-bottom: 1px solid #DDE4F0;
       text-decoration: none;
       color: inherit;
-      transition: all 0.15s;
+      transition: border-bottom-color 0.15s;
     }
 
-    .entry:hover {
-      border-bottom-color: #0076C0;
-      background: none;
+    .entry:hover { border-bottom-color: #0076C0; }
+    .entry:hover .entry-num { color: #0076C0; }
+    .entry:hover .entry-title { color: #0076C0; }
+    .entry:hover .entry-arrow { color: #0076C0; }
+    .entry:hover .thumb-wrap { border-color: #0076C0; }
+
+    .entry.final { border-bottom: 2px solid #E31837; }
+    .entry.final .entry-num { color: #E31837; }
+    .entry.final .entry-title { font-style: italic; }
+    .entry.final .thumb-wrap { border-color: #E31837; }
+
+    /* ── THUMBNAIL ── */
+    .thumb-wrap {
+      width: 190px;
+      height: 119px;
+      overflow: hidden;
+      border: 1px solid #DDE4F0;
+      border-radius: 3px;
+      position: relative;
+      background: #F0F4F8;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
     }
 
-    .entry:hover .entry-num {
-      color: #0076C0;
+    /* Live iframe preview — render at 950px wide, scale down to 190px (0.2) */
+    .thumb-wrap iframe {
+      width: 950px;
+      height: 595px;
+      transform: scale(0.2);
+      transform-origin: top left;
+      pointer-events: none;
+      border: none;
+      display: block;
     }
 
-    .entry:hover .entry-title {
-      color: #0076C0;
+    /* Placeholder for versions without a page yet */
+    .thumb-placeholder {
+      width: 190px;
+      height: 119px;
+      border: 1px solid #DDE4F0;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #F4F6FA 0%, #EDF0F7 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
     }
 
-    .entry:hover .entry-arrow {
-      color: #0076C0;
+    .entry:hover .thumb-placeholder { border-color: #0076C0; }
+
+    .placeholder-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #D0DBE8;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      letter-spacing: -0.04em;
+      line-height: 1;
     }
 
-    .entry.final {
-      border-bottom: 2px solid #E31837;
+    .placeholder-label {
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #C0CDD8;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
     }
 
-    .entry.final .entry-num {
-      color: #E31837;
-    }
-
-    .entry.final .entry-title {
-      color: #0D1F35;
-      font-style: italic;
-    }
-
+    /* ── ENTRY TEXT ── */
     .entry-num {
       font-size: 0.7rem;
       color: #B8C8DA;
       letter-spacing: 0.05em;
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      padding-top: 0.15rem;
       font-weight: 600;
+      text-align: right;
+      transition: color 0.15s;
     }
 
     .entry-body {
@@ -135,7 +171,7 @@
     }
 
     .entry-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: #0D1F35;
       font-style: normal;
       font-weight: normal;
@@ -143,10 +179,9 @@
     }
 
     .entry-desc {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: #8BA0BC;
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      font-style: normal;
     }
 
     .entry-arrow {
@@ -192,52 +227,70 @@
 
 <div class="list">
 
-  <a class="entry" href="pages/v01.html">
+  <!-- v01–v04: live iframe previews -->
+
+  <a class="entry" href="pages/v01.html" target="_blank">
+    <div class="thumb-wrap">
+      <iframe src="pages/v01.html" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+    </div>
     <span class="entry-num">01</span>
     <div class="entry-body">
-      <span class="entry-title">Raw Text</span>
-      <span class="entry-desc">Unstyled HTML — plain data, no CSS</span>
+      <span class="entry-title">Bold Editorial</span>
+      <span class="entry-desc">Dark navy hero, SVG skyline silhouette, large italic type</span>
     </div>
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v02.html">
+  <a class="entry" href="pages/v02.html" target="_blank">
+    <div class="thumb-wrap">
+      <iframe src="pages/v02.html" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+    </div>
     <span class="entry-num">02</span>
     <div class="entry-body">
-      <span class="entry-title">Basic Structure</span>
-      <span class="entry-desc">Semantic headings and sections added</span>
+      <span class="entry-title">Civic Standard</span>
+      <span class="entry-desc">Sky-blue official header, white floating search card</span>
     </div>
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v03.html">
+  <a class="entry" href="pages/v03.html" target="_blank">
+    <div class="thumb-wrap">
+      <iframe src="pages/v03.html" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+    </div>
     <span class="entry-num">03</span>
     <div class="entry-body">
-      <span class="entry-title">First Styles</span>
-      <span class="entry-desc">CSS baseline — clean white, readable fonts</span>
+      <span class="entry-title">Site Yellow</span>
+      <span class="entry-desc">Amber construction-energy hero, bold sans-serif, tile categories</span>
     </div>
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v04.html">
+  <a class="entry" href="pages/v04.html" target="_blank">
+    <div class="thumb-wrap">
+      <iframe src="pages/v04.html" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+    </div>
     <span class="entry-num">04</span>
     <div class="entry-body">
-      <span class="entry-title">Chicago Palette</span>
-      <span class="entry-desc">City flag colors introduced</span>
+      <span class="entry-title">White Ledger</span>
+      <span class="entry-desc">Minimal white, giant stat number as hero, ledger-style list</span>
     </div>
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v05.html">
+  <!-- v05–v25: placeholders (pages not yet built) -->
+
+  <a class="entry" href="pages/v05.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">05</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">05</span>
     <div class="entry-body">
       <span class="entry-title">Card Grid</span>
-      <span class="entry-desc">Each construction site becomes a card</span>
+      <span class="entry-desc">Each construction site as a card</span>
     </div>
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v06.html">
+  <a class="entry" href="pages/v06.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">06</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">06</span>
     <div class="entry-body">
       <span class="entry-title">Status System</span>
@@ -246,7 +299,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v07.html">
+  <a class="entry" href="pages/v07.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">07</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">07</span>
     <div class="entry-body">
       <span class="entry-title">Map Hero</span>
@@ -255,7 +309,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v08.html">
+  <a class="entry" href="pages/v08.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">08</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">08</span>
     <div class="entry-body">
       <span class="entry-title">Navigation</span>
@@ -264,7 +319,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v09.html">
+  <a class="entry" href="pages/v09.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">09</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">09</span>
     <div class="entry-body">
       <span class="entry-title">Filter UI</span>
@@ -273,7 +329,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v10.html">
+  <a class="entry" href="pages/v10.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">10</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">10</span>
     <div class="entry-body">
       <span class="entry-title">Timeline View</span>
@@ -282,7 +339,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v11.html">
+  <a class="entry" href="pages/v11.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">11</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">11</span>
     <div class="entry-body">
       <span class="entry-title">Data Table</span>
@@ -291,7 +349,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v12.html">
+  <a class="entry" href="pages/v12.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">12</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">12</span>
     <div class="entry-body">
       <span class="entry-title">Icon Language</span>
@@ -300,7 +359,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v13.html">
+  <a class="entry" href="pages/v13.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">13</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">13</span>
     <div class="entry-body">
       <span class="entry-title">Search First</span>
@@ -309,7 +369,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v14.html">
+  <a class="entry" href="pages/v14.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">14</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">14</span>
     <div class="entry-body">
       <span class="entry-title">Hero Moment</span>
@@ -318,7 +379,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v15.html">
+  <a class="entry" href="pages/v15.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">15</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">15</span>
     <div class="entry-body">
       <span class="entry-title">Sidebar Layout</span>
@@ -327,7 +389,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v16.html">
+  <a class="entry" href="pages/v16.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">16</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">16</span>
     <div class="entry-body">
       <span class="entry-title">Responsive Grid</span>
@@ -336,7 +399,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v17.html">
+  <a class="entry" href="pages/v17.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">17</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">17</span>
     <div class="entry-body">
       <span class="entry-title">Dark Theme</span>
@@ -345,7 +409,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v18.html">
+  <a class="entry" href="pages/v18.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">18</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">18</span>
     <div class="entry-body">
       <span class="entry-title">At-a-Glance Stats</span>
@@ -354,7 +419,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v19.html">
+  <a class="entry" href="pages/v19.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">19</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">19</span>
     <div class="entry-body">
       <span class="entry-title">Progress Indicators</span>
@@ -363,7 +429,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v20.html">
+  <a class="entry" href="pages/v20.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">20</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">20</span>
     <div class="entry-body">
       <span class="entry-title">Micro-interactions</span>
@@ -372,7 +439,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v21.html">
+  <a class="entry" href="pages/v21.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">21</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">21</span>
     <div class="entry-body">
       <span class="entry-title">Motion</span>
@@ -381,7 +449,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v22.html">
+  <a class="entry" href="pages/v22.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">22</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">22</span>
     <div class="entry-body">
       <span class="entry-title">Mobile-First</span>
@@ -390,7 +459,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v23.html">
+  <a class="entry" href="pages/v23.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">23</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">23</span>
     <div class="entry-body">
       <span class="entry-title">Accessibility</span>
@@ -399,7 +469,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry" href="pages/v24.html">
+  <a class="entry" href="pages/v24.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">24</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">24</span>
     <div class="entry-body">
       <span class="entry-title">Brand Refinement</span>
@@ -408,7 +479,8 @@
     <span class="entry-arrow">→</span>
   </a>
 
-  <a class="entry final" href="pages/v25.html">
+  <a class="entry final" href="pages/v25.html" target="_blank">
+    <div class="thumb-placeholder"><span class="placeholder-num">25</span><span class="placeholder-label">Not built yet</span></div>
     <span class="entry-num">25</span>
     <div class="entry-body">
       <span class="entry-title">Final Design</span>

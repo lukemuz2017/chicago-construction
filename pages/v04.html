@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Construction Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* v04 — White Ledger
+       Architectural restraint. Pure white, generous type, data as the hero.
+       Think NYT Upshot meets Chicago civic design. No decoration — just clarity. */
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #fff;
+      color: #111;
+    }
+
+    /* ── THIN TOP BAR ── */
+    .topbar {
+      border-bottom: 1px solid #eee;
+      padding: 0 6vw;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-left {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .flag-dot-row {
+      display: flex;
+      gap: 3px;
+    }
+
+    .flag-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+
+    .fd-blue { background: #0076C0; }
+    .fd-red  { background: #E31837; }
+
+    .topbar-right {
+      font-size: 0.62rem;
+      color: #bbb;
+      letter-spacing: 0.05em;
+    }
+
+    .topbar-right a {
+      color: #bbb;
+      text-decoration: none;
+      margin-left: 1.5rem;
+    }
+
+    .topbar-right a:hover { color: #111; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 5rem 6vw 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .hero-number {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .hero-n {
+      font-size: clamp(5rem, 10vw, 9rem);
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -0.06em;
+      line-height: 0.85;
+      display: block;
+    }
+
+    .hero-n-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #0076C0;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 2px solid #0076C0;
+    }
+
+    .hero-right {
+      padding-top: 1rem;
+    }
+
+    .hero-right h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-weight: normal;
+      font-style: italic;
+      line-height: 1.25;
+      color: #111;
+      margin-bottom: 1.25rem;
+    }
+
+    .mission {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.75;
+      max-width: 540px;
+      font-family: 'Georgia', serif;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 6vw;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 1.5rem 0;
+      border-right: 1px solid #eee;
+      padding-right: 2rem;
+      margin-right: 2rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .stat:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .stat-n {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .stat-n.blue { color: #0076C0; }
+    .stat-n.red { color: #E31837; }
+
+    .stat-l {
+      font-size: 0.68rem;
+      color: #aaa;
+      line-height: 1.35;
+    }
+
+    /* ── SEARCH ── */
+    .search-section {
+      padding: 3.5rem 6vw;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .search-left h2 {
+      font-family: 'Georgia', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      font-weight: normal;
+      color: #111;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-left p {
+      font-size: 0.82rem;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .search-right {}
+
+    .search-bar {
+      display: flex;
+      border-bottom: 2px solid #111;
+      margin-bottom: 1rem;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 0.9rem 0;
+      border: none;
+      font-size: 1rem;
+      color: #111;
+      outline: none;
+      background: transparent;
+    }
+
+    .search-bar input::placeholder { color: #ccc; }
+
+    .search-bar button {
+      background: transparent;
+      border: none;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #111;
+      cursor: pointer;
+      padding: 0.9rem 0 0.9rem 1rem;
+    }
+
+    .search-bar button:hover { color: #0076C0; }
+
+    .search-hints {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hint {
+      font-size: 0.65rem;
+      color: #aaa;
+      text-decoration: none;
+      border: 1px solid #eee;
+      padding: 0.25rem 0.6rem;
+      border-radius: 1px;
+      transition: border-color 0.1s, color 0.1s;
+    }
+
+    .hint:hover { border-color: #0076C0; color: #0076C0; }
+
+    /* ── CATEGORIES ── */
+    .cats-section {
+      border-top: 1px solid #eee;
+      padding: 3.5rem 6vw;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .cats-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .cats-header h2 {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    .cats-header span {
+      font-size: 0.62rem;
+      color: #ddd;
+    }
+
+    .cat-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .cat {
+      display: grid;
+      grid-template-columns: 2rem 1fr auto;
+      align-items: baseline;
+      gap: 1.25rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.12s;
+    }
+
+    .cat:hover .cat-num { color: #0076C0; }
+    .cat:hover .cat-name { color: #0076C0; }
+    .cat:hover .cat-arrow { color: #0076C0; }
+
+    /* left-column entries get right padding */
+    .cat:nth-child(odd) { padding-right: 3rem; }
+    /* right-column entries get left padding */
+    .cat:nth-child(even) { padding-left: 3rem; border-left: 1px solid #f0f0f0; }
+
+    .cat-num {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #ddd;
+      letter-spacing: 0.05em;
+      text-align: right;
+      transition: color 0.12s;
+    }
+
+    .cat-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .cat-name {
+      font-size: 0.92rem;
+      color: #111;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      transition: color 0.12s;
+    }
+
+    .cat-desc {
+      font-size: 0.7rem;
+      color: #bbb;
+    }
+
+    .cat-meta {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .cat-count {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #ddd;
+      display: block;
+      letter-spacing: 0.02em;
+    }
+
+    .cat-arrow {
+      font-size: 0.7rem;
+      color: #ddd;
+      display: block;
+      transition: color 0.12s;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #eee;
+      padding: 1.5rem 6vw;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-wordmark {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ddd;
+    }
+
+    .footer-right {
+      font-size: 0.62rem;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="flag-dot-row">
+      <span class="flag-dot fd-blue"></span>
+      <span class="flag-dot fd-red"></span>
+      <span class="flag-dot fd-blue"></span>
+      <span class="flag-dot fd-red"></span>
+    </div>
+    Chicago Construction Tracker
+  </div>
+  <div class="topbar-right">
+    <a href="#">Map</a>
+    <a href="#">Projects</a>
+    <a href="#">Agencies</a>
+    <a href="#">About</a>
+  </div>
+</div>
+
+<!-- Hero: Big number + intro text -->
+<div class="hero">
+  <div class="hero-number">
+    <span class="hero-n">1,247</span>
+    <span class="hero-n-label">Active projects &nbsp;·&nbsp; Chicago, IL</span>
+  </div>
+  <div class="hero-right">
+    <h1>Every construction project<br>across every neighborhood.</h1>
+    <p class="mission">Chicago never stops building. From water main replacements in South Shore to CTA signal upgrades on the Blue Line — this tracker surfaces every active project so residents understand what's happening on their streets, why it's happening, and when it ends.</p>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="stats-row">
+  <div class="stat">
+    <span class="stat-n blue">28,400+</span>
+    <span class="stat-l">Union workers<br>on-site citywide</span>
+  </div>
+  <div class="stat">
+    <span class="stat-n red">389</span>
+    <span class="stat-l">Projects completed<br>this year</span>
+  </div>
+  <div class="stat">
+    <span class="stat-n">$2.4B</span>
+    <span class="stat-l">In active<br>contracts</span>
+  </div>
+  <div class="stat">
+    <span class="stat-n">77</span>
+    <span class="stat-l">Neighborhoods<br>impacted</span>
+  </div>
+  <div class="stat">
+    <span class="stat-n">12</span>
+    <span class="stat-l">City agencies<br>involved</span>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-section">
+  <div class="search-left">
+    <h2>What's happening near you?</h2>
+    <p>Enter a street address, neighborhood name, ZIP code, or project type. Results show active and upcoming projects within a half-mile radius.</p>
+  </div>
+  <div class="search-right">
+    <div class="search-bar">
+      <input type="text" placeholder="Street, neighborhood, or ZIP…" />
+      <button>Search →</button>
+    </div>
+    <div class="search-hints">
+      <a class="hint" href="#">Wicker Park</a>
+      <a class="hint" href="#">The Loop</a>
+      <a class="hint" href="#">60608</a>
+      <a class="hint" href="#">I-290</a>
+      <a class="hint" href="#">Red Line</a>
+      <a class="hint" href="#">Bridgeport</a>
+    </div>
+  </div>
+</div>
+
+<!-- Categories -->
+<div class="cats-section">
+  <div class="cats-header">
+    <h2>Browse by category</h2>
+    <span>8 types &nbsp;·&nbsp; 1,247 projects</span>
+  </div>
+  <div class="cat-list">
+    <a class="cat" href="#">
+      <span class="cat-num">01</span>
+      <div class="cat-body">
+        <span class="cat-name">Roads &amp; Pavement</span>
+        <span class="cat-desc">Resurfacing, pothole repair, curb and alley work</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">423</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">05</span>
+      <div class="cat-body">
+        <span class="cat-name">Utilities</span>
+        <span class="cat-desc">ComEd, Peoples Gas, telecom, streetlights</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">187</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">02</span>
+      <div class="cat-body">
+        <span class="cat-name">Water &amp; Sewer</span>
+        <span class="cat-desc">Water mains, sewer lines, flood infrastructure</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">218</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">06</span>
+      <div class="cat-body">
+        <span class="cat-name">Parks &amp; Recreation</span>
+        <span class="cat-desc">Park District projects, trails, fieldhouses</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">72</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">03</span>
+      <div class="cat-body">
+        <span class="cat-name">Transit &amp; CTA</span>
+        <span class="cat-desc">Train stations, bus lanes, track and platform work</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">94</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">07</span>
+      <div class="cat-body">
+        <span class="cat-name">New Development</span>
+        <span class="cat-desc">Building permits, demolition, new construction</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">138</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">04</span>
+      <div class="cat-body">
+        <span class="cat-name">Highways &amp; Expressways</span>
+        <span class="cat-desc">IDOT and ISTHA expressway and ramp projects</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">61</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+    <a class="cat" href="#">
+      <span class="cat-num">08</span>
+      <div class="cat-body">
+        <span class="cat-name">Bridges &amp; Structures</span>
+        <span class="cat-desc">Bridge decks, viaducts, overpasses, retaining walls</span>
+      </div>
+      <div class="cat-meta">
+        <span class="cat-count">54</span>
+        <span class="cat-arrow">→</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-wordmark">Chicago Construction Tracker</span>
+  <span class="footer-right">City of Chicago &nbsp;·&nbsp; v04 White Ledger</span>
+</footer>
+
+</body>
+</html>
