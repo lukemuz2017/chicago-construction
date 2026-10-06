@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Builds — Construction Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* v08 — Navigation
+       Focus: developed city branding header, primary nav with category dropdowns,
+       secondary utility bar. Chicago Builds banner: v06 dark strip + v07 side layout,
+       align-items: center fix. Based on v02 Civic Standard. */
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #F0F4F8;
+      color: #1a2633;
+    }
+
+    /* ── UTILITY BAR (top of page) ── */
+    .utility-bar {
+      background: #071523;
+      padding: 0 5vw;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .utility-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .flag-mini {
+      display: flex;
+      flex-direction: column;
+      width: 22px;
+      height: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .f-w { flex: 2; background: #fff; }
+    .f-b { flex: 1; background: #0076C0; }
+
+    .utility-left span {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .utility-right {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .utility-right a {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .utility-right a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ── PRIMARY NAV ── */
+    .primary-nav {
+      background: #fff;
+      border-bottom: 1px solid #DDE4EE;
+      padding: 0 5vw;
+      display: flex;
+      align-items: stretch;
+      height: 58px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      margin-right: 3rem;
+      flex-shrink: 0;
+    }
+
+    .nav-brand-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1a2633;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand-name span { color: #0076C0; }
+
+    .nav-items {
+      display: flex;
+      align-items: stretch;
+      list-style: none;
+      flex: 1;
+    }
+
+    .nav-item {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .nav-item > a {
+      display: flex;
+      align-items: center;
+      padding: 0 1.1rem;
+      font-size: 0.75rem;
+      color: #6B88A8;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid transparent;
+      transition: color 0.12s, border-color 0.12s;
+      white-space: nowrap;
+    }
+
+    .nav-item > a.active,
+    .nav-item > a:hover { color: #1a2633; border-bottom-color: #0076C0; }
+
+    .nav-item > a .nav-caret {
+      font-size: 0.5rem;
+      margin-left: 0.3rem;
+      color: #C0D0E0;
+    }
+
+    /* Dropdown */
+    .nav-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #DDE4EE;
+      border-top: 2px solid #0076C0;
+      min-width: 220px;
+      display: none;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .nav-item:hover .nav-dropdown { display: block; }
+
+    .nav-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: #1a2633;
+      text-decoration: none;
+      border-bottom: 1px solid #F0F4F8;
+    }
+
+    .nav-dropdown a:last-child { border-bottom: none; }
+    .nav-dropdown a:hover { background: #F4F8FF; color: #0076C0; }
+
+    .nav-dropdown a .dd-icon { font-size: 1rem; }
+    .nav-dropdown a .dd-count { margin-left: auto; font-size: 0.62rem; color: #B0C4D8; font-weight: 600; }
+
+    .nav-search {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #DDE4EE;
+      border-radius: 3px;
+      overflow: hidden;
+      height: 34px;
+    }
+
+    .nav-search-box input {
+      border: none;
+      padding: 0 0.75rem;
+      width: 200px;
+      font-size: 0.78rem;
+      color: #1a2633;
+      outline: none;
+      background: transparent;
+    }
+
+    .nav-search-box input::placeholder { color: #B8C8DA; }
+
+    .nav-search-box button {
+      background: #0076C0;
+      border: none;
+      color: #fff;
+      padding: 0 0.75rem;
+      height: 34px;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    /* ── CHICAGO BUILDS BANNER ── */
+    .builds-banner {
+      background: #0D1F35;
+      padding: 1.25rem 5vw;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .builds-wordmark {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .builds-divider {
+      width: 2px;
+      height: 2.5rem;
+      background: #0076C0;
+      flex-shrink: 0;
+    }
+
+    .builds-tagline {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.55;
+      max-width: 520px;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      background: #fff;
+      border-bottom: 1px solid #DDE4EE;
+      padding: 0 5vw;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb a, .breadcrumb span {
+      font-size: 0.68rem;
+      color: #8BA0BC;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover { color: #0076C0; }
+    .breadcrumb .sep { color: #C8D8E8; font-size: 0.6rem; }
+    .breadcrumb .current { color: #1a2633; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(155deg, #0055A5 0%, #0076C0 50%, #0096E0 100%);
+      padding: 4rem 5vw 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg, transparent, transparent 40px,
+        rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px
+      );
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-left h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .hero-left p { font-size: 0.95rem; color: rgba(255,255,255,0.65); line-height: 1.65; max-width: 420px; }
+
+    .hero-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .card-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0076C0; margin-bottom: 0.6rem; }
+    .card-title { font-size: 1rem; font-weight: 700; color: #1a2633; margin-bottom: 0.35rem; }
+    .card-sub { font-size: 0.75rem; color: #8BA0BC; margin-bottom: 1.25rem; }
+
+    .search-row { display: flex; border: 1.5px solid #DDE4EE; border-radius: 2px; overflow: hidden; margin-bottom: 1rem; }
+    .search-row input { flex: 1; padding: 0.8rem 0.9rem; border: none; font-size: 0.85rem; color: #1a2633; outline: none; }
+    .search-row input::placeholder { color: #bbb; }
+    .search-row button { background: #0076C0; color: #fff; border: none; padding: 0.8rem 1.1rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+
+    .quick-links { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .quick-link { font-size: 0.65rem; color: #0076C0; background: #EEF5FB; padding: 0.25rem 0.6rem; border-radius: 2px; text-decoration: none; }
+
+    /* ── STATS ── */
+    .stats { background: #fff; border-bottom: 1px solid #DDE4EE; }
+    .stats-inner { max-width: 1100px; margin: 0 auto; display: flex; padding: 0 5vw; }
+    .stat { flex: 1; padding: 1.75rem 1rem; border-right: 1px solid #DDE4EE; text-align: center; }
+    .stat:last-child { border-right: none; }
+    .stat-n { display: block; font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; color: #0076C0; margin-bottom: 0.3rem; }
+    .stat-n.red { color: #E31837; }
+    .stat-n.dark { color: #1a2633; }
+    .stat-l { font-size: 0.6rem; color: #8BA0BC; text-transform: uppercase; letter-spacing: 0.12em; }
+
+    /* ── CATEGORIES ── */
+    .cats { max-width: 1100px; margin: 0 auto; padding: 3.5rem 5vw; }
+    .cats-h { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.75rem; }
+    .cats-h h2 { font-size: 1.1rem; font-weight: 700; color: #1a2633; }
+    .cats-h a { font-size: 0.72rem; color: #0076C0; text-decoration: none; }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .cat { background: #fff; border: 1px solid #DDE4EE; border-left: 4px solid #DDE4EE; padding: 1.25rem; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 0.35rem; transition: border-left-color 0.12s, box-shadow 0.12s; }
+    .cat:hover { border-left-color: #0076C0; box-shadow: 0 2px 12px rgba(0,118,192,0.1); }
+    .cat:hover .cat-name { color: #0076C0; }
+    .cat-icon { font-size: 1.3rem; display: block; margin-bottom: 0.2rem; }
+    .cat-name { font-size: 0.82rem; font-weight: 700; color: #1a2633; transition: color 0.12s; }
+    .cat-desc { font-size: 0.68rem; color: #8BA0BC; line-height: 1.4; }
+    .cat-count { font-size: 0.6rem; font-weight: 700; color: #0076C0; margin-top: auto; padding-top: 0.4rem; }
+
+    /* ── COMMUNITY FEEDBACK ── */
+    .feedback { background: #fff; border-top: 1px solid #DDE4EE; padding: 4rem 5vw; }
+    .feedback-inner { max-width: 1100px; margin: 0 auto; }
+
+    .feedback-top { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 2.5rem; align-items: end; }
+
+    .feedback-tag { display: inline-flex; align-items: center; background: #EEF5FB; border: 1px solid #C8DFF0; color: #0076C0; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.28rem 0.65rem; margin-bottom: 0.9rem; }
+
+    .feedback-top h2 { font-size: 1.6rem; font-weight: 800; color: #1a2633; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.65rem; }
+    .feedback-top p { font-size: 0.85rem; color: #6B88A8; line-height: 1.7; }
+
+    .feedback-stats { display: flex; flex-direction: column; border: 1px solid #DDE4EE; }
+    .fstat { display: flex; align-items: center; gap: 1.25rem; padding: 1.1rem 1.25rem; border-bottom: 1px solid #DDE4EE; }
+    .fstat:last-child { border-bottom: none; }
+    .fstat-n { font-size: 1.5rem; font-weight: 800; color: #0076C0; letter-spacing: -0.04em; min-width: 3.5rem; }
+    .fstat-l { font-size: 0.72rem; color: #6B88A8; line-height: 1.4; }
+
+    .feedback-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8BA0BC; margin-bottom: 0.35rem; }
+    .form-group select, .form-group input, .form-group textarea { width: 100%; border: 1.5px solid #DDE4EE; color: #1a2633; background: #fff; padding: 0.7rem 0.85rem; font-size: 0.82rem; font-family: inherit; outline: none; appearance: none; transition: border-color 0.12s; }
+    .form-group select:focus, .form-group input:focus, .form-group textarea:focus { border-color: #0076C0; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #ccc; }
+    .form-group textarea { resize: vertical; min-height: 75px; }
+    .form-full { grid-column: 1 / -1; }
+    .form-submit { background: #0076C0; color: #fff; border: none; padding: 0.85rem 2rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+    .form-submit:hover { background: #005fa3; }
+    .form-note { font-size: 0.62rem; color: #aaa; margin-top: 1rem; grid-column: 1 / -1; line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer { background: #fff; border-top: 1px solid #DDE4EE; padding: 1.5rem 5vw; display: flex; align-items: center; gap: 1rem; }
+    .footer-flag { display: flex; flex-direction: column; width: 24px; height: 15px; overflow: hidden; }
+    .footer-name { font-size: 0.7rem; font-weight: 700; color: #1a2633; }
+    .footer-name span { font-weight: 400; color: #8BA0BC; }
+    .footer-sep { flex: 1; }
+    .footer-right { font-size: 0.6rem; color: #ccc; }
+  </style>
+</head>
+<body>
+
+<!-- Utility bar -->
+<div class="utility-bar">
+  <div class="utility-left">
+    <div class="flag-mini"><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div></div>
+    <span>City of Chicago &nbsp;·&nbsp; Public Works &amp; Infrastructure</span>
+  </div>
+  <ul class="utility-right">
+    <li><a href="#">311 Services</a></li>
+    <li><a href="#">City Agencies</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</div>
+
+<!-- Primary nav -->
+<nav class="primary-nav">
+  <div class="nav-brand">
+    <span class="nav-brand-name">Chicago <span>Construction</span> Tracker</span>
+  </div>
+  <ul class="nav-items">
+    <li class="nav-item">
+      <a href="#" class="active">All Projects <span class="nav-caret">▼</span></a>
+      <div class="nav-dropdown">
+        <a href="#"><span class="dd-icon">🛣️</span>Roads &amp; Pavement<span class="dd-count">423</span></a>
+        <a href="#"><span class="dd-icon">💧</span>Water &amp; Sewer<span class="dd-count">218</span></a>
+        <a href="#"><span class="dd-icon">🚊</span>Transit &amp; CTA<span class="dd-count">94</span></a>
+        <a href="#"><span class="dd-icon">🛤️</span>Highways &amp; Expressways<span class="dd-count">61</span></a>
+        <a href="#"><span class="dd-icon">⚡</span>Utilities<span class="dd-count">187</span></a>
+        <a href="#"><span class="dd-icon">🌳</span>Parks &amp; Recreation<span class="dd-count">72</span></a>
+        <a href="#"><span class="dd-icon">🏗️</span>New Development<span class="dd-count">138</span></a>
+        <a href="#"><span class="dd-icon">🌉</span>Bridges &amp; Structures<span class="dd-count">54</span></a>
+      </div>
+    </li>
+    <li class="nav-item"><a href="#">Map View</a></li>
+    <li class="nav-item">
+      <a href="#">By Neighborhood <span class="nav-caret">▼</span></a>
+      <div class="nav-dropdown">
+        <a href="#">The Loop</a>
+        <a href="#">Logan Square</a>
+        <a href="#">Wicker Park</a>
+        <a href="#">South Shore</a>
+        <a href="#">Rogers Park</a>
+        <a href="#">Bridgeport</a>
+        <a href="#">Lakeview</a>
+        <a href="#">Hyde Park</a>
+      </div>
+    </li>
+    <li class="nav-item"><a href="#">Agencies</a></li>
+    <li class="nav-item"><a href="#">Community Reports</a></li>
+  </ul>
+  <div class="nav-search">
+    <div class="nav-search-box">
+      <input type="text" placeholder="Search projects…" />
+      <button>Go</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Chicago Builds banner -->
+<div class="builds-banner">
+  <span class="builds-wordmark">Chicago Builds</span>
+  <div class="builds-divider"></div>
+  <p class="builds-tagline">A community platform tracking Chicago's infrastructure — see what's being built in your neighborhood, understand why it's happening, and report what the city has missed.</p>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="#">Home</a>
+  <span class="sep">›</span>
+  <span class="current">All Active Projects</span>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>Every construction project across every Chicago neighborhood.</h1>
+      <p>From water main work on the South Side to CTA signal upgrades downtown — organized, searchable, and updated daily by city agencies and community reporters.</p>
+    </div>
+    <div class="hero-card">
+      <p class="card-label">Find a project</p>
+      <p class="card-title">What's happening near you?</p>
+      <p class="card-sub">Search by street, neighborhood, ZIP, or project type.</p>
+      <div class="search-row">
+        <input type="text" placeholder="e.g. Milwaukee Ave, 60647, Logan Square…" />
+        <button>Search</button>
+      </div>
+      <div class="quick-links">
+        <a class="quick-link" href="#">The Loop</a>
+        <a class="quick-link" href="#">Wicker Park</a>
+        <a class="quick-link" href="#">South Side</a>
+        <a class="quick-link" href="#">I-90/94</a>
+        <a class="quick-link" href="#">Red Line</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-n">1,247</span><span class="stat-l">Active Projects</span></div>
+    <div class="stat"><span class="stat-n dark">28,400+</span><span class="stat-l">Union Workers On-Site</span></div>
+    <div class="stat"><span class="stat-n red">389</span><span class="stat-l">Completed This Year</span></div>
+    <div class="stat"><span class="stat-n dark">$2.4B</span><span class="stat-l">Active Contracts</span></div>
+    <div class="stat"><span class="stat-n">77</span><span class="stat-l">Neighborhoods Impacted</span></div>
+    <div class="stat"><span class="stat-n dark">12</span><span class="stat-l">City Agencies</span></div>
+  </div>
+</div>
+
+<div class="cats">
+  <div class="cats-h">
+    <h2>Browse by category</h2>
+    <a href="#">View all projects →</a>
+  </div>
+  <div class="cat-grid">
+    <a class="cat" href="#"><span class="cat-icon">🛣️</span><span class="cat-name">Roads &amp; Pavement</span><span class="cat-desc">Resurfacing, pothole repair, curb and alley paving</span><span class="cat-count">423 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">💧</span><span class="cat-name">Water &amp; Sewer</span><span class="cat-desc">Water main replacement, sewer lines, flood infrastructure</span><span class="cat-count">218 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">🚊</span><span class="cat-name">Transit &amp; CTA</span><span class="cat-desc">Train stations, bus lanes, track and platform work</span><span class="cat-count">94 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">🛤️</span><span class="cat-name">Highways &amp; Expressways</span><span class="cat-desc">IDOT and ISTHA expressway and ramp projects</span><span class="cat-count">61 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">⚡</span><span class="cat-name">Utilities</span><span class="cat-desc">ComEd, Peoples Gas, telecom conduit, streetlights</span><span class="cat-count">187 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">🌳</span><span class="cat-name">Parks &amp; Recreation</span><span class="cat-desc">Park District projects, trails, fieldhouse renovations</span><span class="cat-count">72 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">🏗️</span><span class="cat-name">New Development</span><span class="cat-desc">Private building permits, demolition, new construction</span><span class="cat-count">138 active →</span></a>
+    <a class="cat" href="#"><span class="cat-icon">🌉</span><span class="cat-name">Bridges &amp; Structures</span><span class="cat-desc">Bridge decks, viaducts, overpasses, retaining walls</span><span class="cat-count">54 active →</span></a>
+  </div>
+</div>
+
+<section class="feedback">
+  <div class="feedback-inner">
+    <div class="feedback-top">
+      <div>
+        <span class="feedback-tag">Community Reports</span>
+        <h2>See something the city missed?</h2>
+        <p>Chicago Builds is a community platform. Flag unreported hazards, construction running outside permitted hours, or anything missing from official city sites. Your report is reviewed and shared with the relevant agency.</p>
+      </div>
+      <div class="feedback-stats">
+        <div class="fstat"><span class="fstat-n">847</span><span class="fstat-l">Community reports submitted this year</span></div>
+        <div class="fstat"><span class="fstat-n">312</span><span class="fstat-l">Reports escalated to city agencies</span></div>
+        <div class="fstat"><span class="fstat-n">94%</span><span class="fstat-l">Agency acknowledgment rate</span></div>
+      </div>
+    </div>
+    <div class="feedback-form">
+      <div class="form-group">
+        <label>Report type</label>
+        <select><option>Unreported hazard or danger</option><option>Work outside permitted hours</option><option>Project missing from database</option><option>Road or sidewalk damage</option><option>Noise / vibration complaint</option><option>General feedback</option></select>
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" placeholder="Street address or intersection" />
+      </div>
+      <div class="form-group form-full">
+        <label>What did you observe?</label>
+        <textarea placeholder="Be as specific as possible — time, conditions, agency involved if known…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Your contact (optional)</label>
+        <input type="text" placeholder="Email or phone for follow-up" />
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end;">
+        <button class="form-submit">Submit Report</button>
+      </div>
+      <p class="form-note">Reports reviewed before publication. Sensitive info removed. Emergencies: 911 · City services: 311</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-flag"><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div></div>
+  <span class="footer-name">Chicago Builds <span>· City of Chicago</span></span>
+  <div class="footer-sep"></div>
+  <span class="footer-right">v08 — Navigation</span>
+</footer>
+
+</body>
+</html>
