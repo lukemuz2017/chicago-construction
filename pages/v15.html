@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago Builds — Construction Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* v15 — Civic blue + completed projects slideshow.
+       Base: v13. Adds a "Recently Completed" section with an
+       image slideshow between the split section and featured projects. */
+
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F0F4F8; color: #1a2633; }
+
+    /* ── UTILITY BAR ── */
+    .utility-bar { background: #071523; padding: 0 5vw; height: 34px; display: flex; align-items: center; justify-content: space-between; }
+    .utility-left { display: flex; align-items: center; gap: 1rem; }
+    .flag-mini { display: flex; flex-direction: column; width: 20px; height: 13px; overflow: hidden; flex-shrink: 0; }
+    .f-w { flex: 2; background: #fff; }
+    .f-b { flex: 1; background: #0076C0; }
+    .utility-left span { font-size: 0.58rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .utility-right { display: flex; gap: 1.5rem; list-style: none; }
+    .utility-right a { font-size: 0.58rem; color: rgba(255,255,255,0.28); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; }
+    .utility-right a:hover { color: rgba(255,255,255,0.55); }
+
+    /* ── NAV ── */
+    .primary-nav { background: #fff; border-bottom: 1px solid #DDE4EE; padding: 0 5vw; display: flex; align-items: stretch; height: 48px; }
+    .nav-items { display: flex; align-items: stretch; list-style: none; flex: 1; }
+    .nav-item { display: flex; align-items: stretch; }
+    .nav-item > a { display: flex; align-items: center; padding: 0 1rem; font-size: 0.72rem; color: #6B88A8; text-decoration: none; border-bottom: 2px solid transparent; transition: color 0.12s, border-color 0.12s; }
+    .nav-item > a.active, .nav-item > a:hover { color: #1a2633; border-bottom-color: #0076C0; }
+    .nav-search { margin-left: auto; display: flex; align-items: center; }
+    .nav-search-box { display: flex; border: 1.5px solid #DDE4EE; overflow: hidden; height: 30px; }
+    .nav-search-box input { border: none; padding: 0 0.7rem; width: 190px; font-size: 0.75rem; color: #1a2633; outline: none; }
+    .nav-search-box input::placeholder { color: #C0D0E0; }
+    .nav-search-box button { background: #0076C0; border: none; color: #fff; padding: 0 0.75rem; font-size: 0.65rem; cursor: pointer; font-weight: 600; }
+
+    /* ── BUILDS BANNER ── */
+    .builds-banner { background: #0D1F35; padding: 1.1rem 5vw; display: flex; align-items: center; gap: 1.5rem; }
+    .builds-wordmark { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 900; color: #fff; letter-spacing: -0.04em; line-height: 1; flex-shrink: 0; white-space: nowrap; }
+    .builds-divider { width: 2px; height: 2.2rem; background: #0076C0; flex-shrink: 0; }
+    .builds-tagline { font-size: 0.8rem; color: rgba(255,255,255,0.4); line-height: 1.55; max-width: 520px; }
+
+    /* ── HERO ── */
+    .hero { background: linear-gradient(155deg, #0055A5 0%, #0076C0 50%, #0096E0 100%); padding: 3.5rem 5vw 4.5rem; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px); }
+    .hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 380px; gap: 3.5rem; align-items: center; }
+    .hero-left h1 { font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 0.9rem; }
+    .hero-left p { font-size: 0.92rem; color: rgba(255,255,255,0.65); line-height: 1.65; max-width: 400px; }
+    .hero-card { background: #fff; border-radius: 3px; padding: 1.6rem; box-shadow: 0 16px 48px rgba(0,0,0,0.2); }
+    .card-label { font-size: 0.57rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0076C0; margin-bottom: 0.5rem; }
+    .card-title { font-size: 0.95rem; font-weight: 700; color: #1a2633; margin-bottom: 0.3rem; }
+    .card-sub { font-size: 0.72rem; color: #8BA0BC; margin-bottom: 1.1rem; }
+    .search-row { display: flex; border: 1.5px solid #DDE4EE; overflow: hidden; margin-bottom: 0.85rem; }
+    .search-row input { flex: 1; padding: 0.75rem 0.85rem; border: none; font-size: 0.82rem; color: #1a2633; outline: none; }
+    .search-row input::placeholder { color: #ccc; }
+    .search-row button { background: #0076C0; color: #fff; border: none; padding: 0.75rem 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+    .quick-links { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .quick-link { font-size: 0.62rem; color: #0076C0; background: #EEF5FB; padding: 0.22rem 0.55rem; text-decoration: none; }
+
+    /* ── STATS ── */
+    .stats { background: #fff; border-bottom: 1px solid #DDE4EE; }
+    .stats-inner { max-width: 1100px; margin: 0 auto; display: flex; padding: 0 5vw; }
+    .stat { flex: 1; padding: 1.4rem 0.75rem; border-right: 1px solid #DDE4EE; text-align: center; }
+    .stat:last-child { border-right: none; }
+    .stat-n { display: block; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; color: #0076C0; margin-bottom: 0.25rem; }
+    .stat-n.red { color: #E31837; }
+    .stat-n.dark { color: #1a2633; }
+    .stat-l { font-size: 0.58rem; color: #8BA0BC; text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* ── SPLIT ── */
+    .split-section { background: #fff; border-top: 1px solid #DDE4EE; }
+    .split-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; }
+
+    .section-tag { display: inline-flex; background: #EEF5FB; border: 1px solid #C8DFF0; color: #0076C0; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.6rem; margin-bottom: 0.85rem; }
+    .split-col h2 { font-size: 1rem; font-weight: 800; color: #1a2633; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+    .split-col .section-sub { font-size: 0.75rem; color: #6B88A8; line-height: 1.6; margin-bottom: 1.25rem; }
+
+    .split-cats { padding: 2.5rem 2rem 2.5rem 5vw; border-right: 1px solid #DDE4EE; }
+    .split-feedback { padding: 2.5rem 5vw 2.5rem 2rem; }
+
+    .cat-grid-full { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .cat { background: #F4F7FB; border: 1px solid #DDE4EE; border-left: 3px solid #DDE4EE; padding: 0.85rem 0.9rem; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 0.2rem; transition: border-left-color 0.12s, background 0.12s; }
+    .cat:hover { border-left-color: #0076C0; background: #EEF5FF; }
+    .cat:hover .cat-name { color: #0076C0; }
+    .cat-icon { font-size: 1.1rem; display: block; }
+    .cat-name { font-size: 0.75rem; font-weight: 700; color: #1a2633; transition: color 0.12s; }
+    .cat-count { font-size: 0.58rem; color: #8BA0BC; }
+
+    .feedback-impact-row { display: flex; gap: 0; border: 1px solid #DDE4EE; margin-bottom: 1.1rem; }
+    .fi-stat { flex: 1; padding: 0.65rem 0.75rem; border-right: 1px solid #DDE4EE; text-align: center; }
+    .fi-stat:last-child { border-right: none; }
+    .fi-n { display: block; font-size: 1rem; font-weight: 800; color: #0076C0; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.15rem; }
+    .fi-l { font-size: 0.53rem; color: #8BA0BC; line-height: 1.3; }
+    .form-group { margin-bottom: 0.8rem; }
+    .form-group label { display: block; font-size: 0.57rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8BA0BC; margin-bottom: 0.28rem; }
+    .form-group select, .form-group input, .form-group textarea { width: 100%; border: 1.5px solid #DDE4EE; color: #1a2633; background: #fff; padding: 0.6rem 0.75rem; font-size: 0.78rem; font-family: inherit; outline: none; appearance: none; transition: border-color 0.12s; }
+    .form-group select:focus, .form-group input:focus, .form-group textarea:focus { border-color: #0076C0; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #ccc; }
+    .form-group textarea { resize: vertical; min-height: 58px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .form-submit { background: #0076C0; color: #fff; border: none; padding: 0.72rem; width: 100%; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+    .form-submit:hover { background: #005fa3; }
+    .form-note { font-size: 0.58rem; color: #aaa; margin-top: 0.55rem; line-height: 1.5; }
+
+    /* ── COMPLETED PROJECTS SLIDESHOW ── */
+    .completed-section {
+      background: #0D1F35;
+      padding: 3rem 5vw;
+    }
+
+    .completed-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .completed-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .completed-tag {
+      display: inline-flex;
+      background: rgba(0,118,192,0.2);
+      border: 1px solid rgba(0,118,192,0.4);
+      color: #5BB8F5;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .completed-header-left h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .completed-header a {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      align-self: flex-end;
+    }
+
+    .completed-header a:hover { color: #5BB8F5; }
+
+    /* Slideshow container */
+    .slideshow {
+      position: relative;
+    }
+
+    .slides {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* Each slide is always visible in a 3-up layout;
+       JS highlights the "active" one and fades the others */
+    .slide {
+      position: relative;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+
+    .slide:hover img { transform: scale(1.03); }
+
+    .slide.dimmed { opacity: 0.45; }
+
+    /* Caption overlay */
+    .slide-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(5,15,28,0.92));
+      padding: 2.5rem 1rem 1rem;
+    }
+
+    .slide-status {
+      display: inline-block;
+      background: #22A05A;
+      color: #fff;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.45rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .slide-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+
+    .slide-meta {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Detail panel — shows for the active slide */
+    .slide-detail {
+      display: none;
+      background: #132840;
+      border: 1px solid #1E3A54;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .detail-item {}
+    .detail-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #4A6580; margin-bottom: 0.3rem; }
+    .detail-value { font-size: 0.85rem; color: #fff; font-weight: 600; }
+
+    /* Nav dots */
+    .slideshow-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .dot.active { background: #0076C0; }
+
+    /* Prev/next arrows */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .slide-arrow:hover { background: rgba(0,118,192,0.5); }
+    .slide-arrow.prev { left: -44px; }
+    .slide-arrow.next { right: -44px; }
+
+    /* ── FEATURED PROJECTS ── */
+    .projects-section { background: #F0F4F8; border-top: 1px solid #DDE4EE; padding: 2.5rem 5vw; }
+    .projects-inner { max-width: 1100px; margin: 0 auto; }
+    .projects-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; }
+    .projects-header h2 { font-size: 1rem; font-weight: 700; color: #1a2633; }
+    .projects-header a { font-size: 0.68rem; color: #0076C0; text-decoration: none; }
+
+    .filter-strip { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .filter-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8BA0BC; flex-shrink: 0; }
+    .filter-chips { display: flex; gap: 0.32rem; flex-wrap: wrap; }
+    .chip { font-size: 0.67rem; color: #4A6580; background: #fff; border: 1.5px solid #DDE4EE; padding: 0.26rem 0.65rem; cursor: pointer; white-space: nowrap; transition: all 0.12s; }
+    .chip:hover { border-color: #0076C0; color: #0076C0; }
+    .chip.active { background: #0076C0; border-color: #0076C0; color: #fff; }
+    .chip.s-ip { border-color: #22A05A; color: #22A05A; }
+    .chip.s-ip.active { background: #22A05A; border-color: #22A05A; color: #fff; }
+    .chip.s-ps { border-color: #F59E0B; color: #D97706; }
+    .filter-sep { width: 1px; height: 1.1rem; background: #DDE4EE; flex-shrink: 0; }
+    .filter-select { font-size: 0.67rem; color: #4A6580; background: #fff; border: 1.5px solid #DDE4EE; padding: 0.26rem 1.6rem 0.26rem 0.6rem; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238BA0BC'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.4rem center; outline: none; }
+    .filter-count { margin-left: auto; font-size: 0.67rem; color: #8BA0BC; }
+    .filter-count strong { color: #1a2633; }
+
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .project-card { background: #fff; border: 1px solid #DDE4EE; display: flex; flex-direction: column; }
+    .card-body { padding: 1.2rem 1.2rem 1rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.4rem; }
+    .card-cat { font-size: 0.57rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8BA0BC; }
+    .status-badge { font-size: 0.54rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.16rem 0.42rem; flex-shrink: 0; }
+    .status-badge.ip { background: rgba(34,160,90,0.1); color: #22A05A; }
+    .status-badge.ps { background: rgba(245,158,11,0.1); color: #D97706; }
+    .status-badge.ns { background: rgba(139,160,188,0.1); color: #8BA0BC; }
+    .card-title { font-size: 0.87rem; font-weight: 700; color: #1a2633; line-height: 1.3; }
+    .card-loc { font-size: 0.67rem; color: #8BA0BC; }
+    .card-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .card-meta-item { font-size: 0.6rem; color: #8BA0BC; }
+    .card-meta-item strong { color: #4A6580; }
+    .progress-wrap { background: #EEF2F7; height: 4px; border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 2px; }
+    .pf-blue { background: #0076C0; }
+    .pf-yellow { background: #F59E0B; }
+    .pf-gray { background: #C0D0E0; }
+    .card-footer-row { display: flex; justify-content: space-between; align-items: center; }
+    .card-end { font-size: 0.58rem; color: #aaa; }
+    .card-pct { font-size: 0.6rem; font-weight: 700; color: #0076C0; }
+
+    .card-comment-area { border-top: 1px solid #F0F4F8; }
+    .card-comment-trigger { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 0.65rem; color: #8BA0BC; transition: background 0.12s, color 0.12s; user-select: none; }
+    .card-comment-trigger:hover { background: #F8FAFD; color: #0076C0; }
+    .card-comment-trigger.open { color: #0076C0; background: #F4F8FF; }
+    .trigger-arrow { font-size: 0.55rem; color: #C0D0E0; transition: transform 0.15s; }
+    .card-comment-trigger.open .trigger-arrow { transform: rotate(90deg); color: #0076C0; }
+    .card-comment-form { display: none; padding: 0.85rem 1.2rem; background: #F8FAFD; border-top: 1px solid #EEF2F8; }
+    .card-comment-form textarea { width: 100%; border: 1.5px solid #DDE4EE; padding: 0.55rem 0.65rem; font-size: 0.75rem; font-family: inherit; color: #1a2633; resize: none; height: 58px; outline: none; transition: border-color 0.12s; margin-bottom: 0.5rem; }
+    .card-comment-form textarea:focus { border-color: #0076C0; }
+    .card-comment-form textarea::placeholder { color: #ccc; }
+    .comment-form-row { display: flex; gap: 0.5rem; align-items: center; }
+    .comment-form-row input { flex: 1; border: 1.5px solid #DDE4EE; padding: 0.45rem 0.6rem; font-size: 0.72rem; font-family: inherit; color: #1a2633; outline: none; }
+    .comment-form-row input:focus { border-color: #0076C0; }
+    .comment-form-row input::placeholder { color: #ccc; }
+    .comment-form-row button { background: #0076C0; color: #fff; border: none; padding: 0.45rem 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; flex-shrink: 0; }
+    .comment-form-row button:hover { background: #005fa3; }
+
+    footer { background: #fff; border-top: 1px solid #DDE4EE; padding: 1.4rem 5vw; display: flex; align-items: center; gap: 1rem; }
+    .footer-flag { display: flex; flex-direction: column; width: 22px; height: 14px; overflow: hidden; }
+    .footer-name { font-size: 0.68rem; font-weight: 700; color: #1a2633; }
+    .footer-name span { font-weight: 400; color: #8BA0BC; }
+    .footer-sep { flex: 1; }
+    .footer-right { font-size: 0.58rem; color: #ccc; }
+  </style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <div class="utility-left">
+    <div class="flag-mini"><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div></div>
+    <span>City of Chicago &nbsp;·&nbsp; Public Works &amp; Infrastructure</span>
+  </div>
+  <ul class="utility-right">
+    <li><a href="#">311 Services</a></li>
+    <li><a href="#">City Agencies</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</div>
+
+<nav class="primary-nav">
+  <ul class="nav-items">
+    <li class="nav-item"><a href="#" class="active">All Projects</a></li>
+    <li class="nav-item"><a href="#">Map View</a></li>
+    <li class="nav-item"><a href="#">By Neighborhood</a></li>
+    <li class="nav-item"><a href="#">Agencies</a></li>
+    <li class="nav-item"><a href="#">Community Reports</a></li>
+  </ul>
+  <div class="nav-search">
+    <div class="nav-search-box">
+      <input type="text" placeholder="Search projects…" />
+      <button>Go</button>
+    </div>
+  </div>
+</nav>
+
+<div class="builds-banner">
+  <span class="builds-wordmark">Chicago Builds</span>
+  <div class="builds-divider"></div>
+  <p class="builds-tagline">A community platform tracking Chicago's infrastructure — see what's being built in your neighborhood, understand why it's happening, and report what the city has missed.</p>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>Every construction project across every Chicago neighborhood.</h1>
+      <p>From water main work on the South Side to CTA upgrades downtown — organized, searchable, and updated daily.</p>
+    </div>
+    <div class="hero-card">
+      <p class="card-label">Find a project</p>
+      <p class="card-title">What's happening near you?</p>
+      <p class="card-sub">Search by street, neighborhood, ZIP, or project type.</p>
+      <div class="search-row">
+        <input type="text" placeholder="e.g. Milwaukee Ave, Logan Square, 60647…" />
+        <button>Search</button>
+      </div>
+      <div class="quick-links">
+        <a class="quick-link" href="#">The Loop</a>
+        <a class="quick-link" href="#">Wicker Park</a>
+        <a class="quick-link" href="#">South Side</a>
+        <a class="quick-link" href="#">Red Line</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-n">1,247</span><span class="stat-l">Active Projects</span></div>
+    <div class="stat"><span class="stat-n dark">28,400+</span><span class="stat-l">Union Workers</span></div>
+    <div class="stat"><span class="stat-n red">389</span><span class="stat-l">Completed This Year</span></div>
+    <div class="stat"><span class="stat-n dark">$2.4B</span><span class="stat-l">Active Contracts</span></div>
+    <div class="stat"><span class="stat-n">77</span><span class="stat-l">Neighborhoods</span></div>
+    <div class="stat"><span class="stat-n dark">12</span><span class="stat-l">City Agencies</span></div>
+  </div>
+</div>
+
+<div class="split-section">
+  <div class="split-inner">
+    <div class="split-cats split-col">
+      <span class="section-tag">8 Project Types</span>
+      <h2>Find work near you</h2>
+      <p class="section-sub">Browse by construction type to explore all active and upcoming projects across Chicago's 77 neighborhoods.</p>
+      <div class="cat-grid-full">
+        <a class="cat" href="#"><span class="cat-icon">🛣️</span><span class="cat-name">Roads &amp; Pavement</span><span class="cat-count">423 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">💧</span><span class="cat-name">Water &amp; Sewer</span><span class="cat-count">218 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">🚊</span><span class="cat-name">Transit &amp; CTA</span><span class="cat-count">94 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">⚡</span><span class="cat-name">Utilities</span><span class="cat-count">187 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">🛤️</span><span class="cat-name">Highways &amp; Expressways</span><span class="cat-count">61 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">🌳</span><span class="cat-name">Parks &amp; Recreation</span><span class="cat-count">72 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">🏗️</span><span class="cat-name">New Development</span><span class="cat-count">138 active</span></a>
+        <a class="cat" href="#"><span class="cat-icon">🌉</span><span class="cat-name">Bridges &amp; Structures</span><span class="cat-count">54 active</span></a>
+      </div>
+    </div>
+    <div class="split-feedback split-col">
+      <span class="section-tag">Community Platform</span>
+      <h2>See something the city missed?</h2>
+      <p class="section-sub">Flag unreported hazards, work outside permitted hours, or anything missing from official sites. Reports go to our editors and the relevant agency.</p>
+      <div class="feedback-impact-row">
+        <div class="fi-stat"><span class="fi-n">847</span><span class="fi-l">Reports this year</span></div>
+        <div class="fi-stat"><span class="fi-n">312</span><span class="fi-l">Sent to agencies</span></div>
+        <div class="fi-stat"><span class="fi-n">94%</span><span class="fi-l">Response rate</span></div>
+      </div>
+      <div class="form-group"><label>Report type</label><select><option>Unreported hazard or danger</option><option>Work outside permitted hours</option><option>Project missing from database</option><option>Road or sidewalk damage</option><option>Noise / vibration complaint</option><option>General feedback</option></select></div>
+      <div class="form-group"><label>Location</label><input type="text" placeholder="Street address or intersection" /></div>
+      <div class="form-group"><label>What did you observe?</label><textarea placeholder="Be as specific as possible…"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Your contact (optional)</label><input type="text" placeholder="Email or phone" /></div>
+        <div class="form-group" style="display:flex;align-items:flex-end;"><button class="form-submit" style="margin-top:0">Submit Report</button></div>
+      </div>
+      <p class="form-note">Reports reviewed before publication. Sensitive info removed. Emergencies: 911 · City services: 311</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMPLETED PROJECTS SLIDESHOW ── -->
+<section class="completed-section">
+  <div class="completed-inner">
+    <div class="completed-header">
+      <div class="completed-header-left">
+        <div class="completed-tag">Recently Completed</div>
+        <h2>Built for Chicago</h2>
+      </div>
+      <a href="#">View all 389 completed projects →</a>
+    </div>
+
+    <div class="slideshow">
+      <div class="slide-arrow prev" onclick="shiftSlide(-1)">‹</div>
+      <div class="slides" id="slides">
+
+        <div class="slide active" onclick="setActive(0)">
+          <img src="../ChicagoRiverWalk.jpg" alt="Chicago Riverwalk Extension" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Chicago Riverwalk Phase III Extension</div>
+            <div class="slide-meta">River North &nbsp;·&nbsp; Completed Sep 2025</div>
+          </div>
+        </div>
+
+        <div class="slide dimmed" onclick="setActive(1)">
+          <img src="../DamenStop.jpg" alt="Damen Green Line Station Renovation" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Damen Green Line Station Renovation</div>
+            <div class="slide-meta">East Garfield Park &nbsp;·&nbsp; Completed Jul 2025</div>
+          </div>
+        </div>
+
+        <div class="slide dimmed" onclick="setActive(2)">
+          <img src="../MontroseBirdSanctuary.jpg" alt="Montrose Bird Sanctuary Restoration" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Montrose Bird Sanctuary Restoration</div>
+            <div class="slide-meta">Uptown &nbsp;·&nbsp; Completed Aug 2025</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-arrow next" onclick="shiftSlide(1)">›</div>
+    </div>
+
+    <!-- Detail panel — updates with active slide -->
+    <div class="slide-detail" id="slideDetail">
+      <div class="detail-item"><div class="detail-label">Agency</div><div class="detail-value" id="detailAgency">Chicago DPD / IDOT</div></div>
+      <div class="detail-item"><div class="detail-label">Contract Value</div><div class="detail-value" id="detailCost">$18.4M</div></div>
+      <div class="detail-item"><div class="detail-label">Duration</div><div class="detail-value" id="detailDuration">14 months</div></div>
+      <div class="detail-item"><div class="detail-label">Ward</div><div class="detail-value" id="detailWard">42nd Ward</div></div>
+    </div>
+
+    <div class="slideshow-dots">
+      <div class="dot active" onclick="setActive(0)"></div>
+      <div class="dot" onclick="setActive(1)"></div>
+      <div class="dot" onclick="setActive(2)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED PROJECTS ── -->
+<div class="projects-section">
+  <div class="projects-inner">
+    <div class="projects-header">
+      <h2>Active projects</h2>
+      <a href="#">View all 1,247 →</a>
+    </div>
+    <div class="filter-strip">
+      <span class="filter-label">Type</span>
+      <div class="filter-chips">
+        <span class="chip active">All</span>
+        <span class="chip">🛣️ Roads</span>
+        <span class="chip">💧 Water</span>
+        <span class="chip">🚊 Transit</span>
+        <span class="chip">⚡ Utilities</span>
+      </div>
+      <div class="filter-sep"></div>
+      <span class="filter-label">Status</span>
+      <div class="filter-chips">
+        <span class="chip s-ip active">In Progress</span>
+        <span class="chip s-ps">Paused</span>
+      </div>
+      <div class="filter-sep"></div>
+      <select class="filter-select"><option>All Neighborhoods</option><option>Logan Square</option><option>Rogers Park</option><option>Lakeview</option><option>West Loop</option></select>
+      <span class="filter-count">Showing <strong>6</strong> of 847</span>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Roads &amp; Pavement</span><span class="status-badge ip">In Progress</span></div>
+          <div class="card-title">Milwaukee Ave Full Resurfacing</div>
+          <div class="card-loc">📍 Logan Square — Milwaukee &amp; Kedzie</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> CDOT</span><span class="card-meta-item"><strong>Hours:</strong> 7am–4pm weekdays</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-blue" style="width:65%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Dec 2025</span><span class="card-pct">65%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Water &amp; Sewer</span><span class="status-badge ip">In Progress</span></div>
+          <div class="card-title">North Shore Water Main Replacement</div>
+          <div class="card-loc">📍 Rogers Park — Howard &amp; Clark</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> MWD</span><span class="card-meta-item"><strong>Hours:</strong> 8am–5pm weekdays</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-blue" style="width:30%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Mar 2026</span><span class="card-pct">30%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Transit &amp; CTA</span><span class="status-badge ip">In Progress</span></div>
+          <div class="card-title">Red Line Signal Modernization</div>
+          <div class="card-loc">📍 Lakeview — Belmont to Fullerton</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> CTA</span><span class="card-meta-item"><strong>Hours:</strong> Overnight only</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-blue" style="width:80%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Nov 2025</span><span class="card-pct">80%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Highways &amp; Expressways</span><span class="status-badge ps">Paused</span></div>
+          <div class="card-title">I-290 Ramp Reconstruction at Halsted</div>
+          <div class="card-loc">📍 West Loop — I-290 &amp; Halsted St</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> IDOT</span><span class="card-meta-item"><strong>Status:</strong> Weather delay</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-yellow" style="width:45%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Apr 2026</span><span class="card-pct">45%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Utilities</span><span class="status-badge ns">Not Started</span></div>
+          <div class="card-title">ComEd Underground Cable Replacement</div>
+          <div class="card-loc">📍 Wicker Park — North &amp; Damen</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> ComEd</span><span class="card-meta-item"><strong>Start:</strong> Jan 2026</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-gray" style="width:0%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Jun 2026</span><span class="card-pct">0%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Parks &amp; Recreation</span><span class="status-badge ip">In Progress</span></div>
+          <div class="card-title">Humboldt Park Fieldhouse Renovation</div>
+          <div class="card-loc">📍 Humboldt Park — 1400 N Sacramento</div>
+          <div class="card-meta"><span class="card-meta-item"><strong>Agency:</strong> Park District</span><span class="card-meta-item"><strong>Hours:</strong> 7am–6pm</span></div>
+          <div class="progress-wrap"><div class="progress-fill pf-blue" style="width:55%"></div></div>
+          <div class="card-footer-row"><span class="card-end">Est. Feb 2026</span><span class="card-pct">55%</span></div>
+        </div>
+        <div class="card-comment-area">
+          <div class="card-comment-trigger" onclick="toggleComment(this)"><span>💬&nbsp; Add a comment or concern</span><span class="trigger-arrow">›</span></div>
+          <div class="card-comment-form"><textarea placeholder="Share what you observed…"></textarea><div class="comment-form-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-flag"><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div><div class="f-b"></div><div class="f-w"></div></div>
+  <span class="footer-name">Chicago Builds <span>· City of Chicago</span></span>
+  <div class="footer-sep"></div>
+  <span class="footer-right">v15 — Completed projects slideshow (blue)</span>
+</footer>
+
+<script>
+  const slideData = [
+    { agency: 'Chicago DPD / IDOT', cost: '$18.4M', duration: '14 months', ward: '42nd Ward' },
+    { agency: 'CTA / Chicago Capital Program', cost: '$31.2M', duration: '22 months', ward: '27th Ward' },
+    { agency: 'Chicago Park District', cost: '$4.8M', duration: '9 months', ward: '46th Ward' }
+  ];
+
+  let current = 0;
+
+  function setActive(idx) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+      s.classList.toggle('dimmed', i !== idx);
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    const d = slideData[idx];
+    document.getElementById('detailAgency').textContent = d.agency;
+    document.getElementById('detailCost').textContent = d.cost;
+    document.getElementById('detailDuration').textContent = d.duration;
+    document.getElementById('detailWard').textContent = d.ward;
+    current = idx;
+  }
+
+  function shiftSlide(dir) {
+    const n = document.querySelectorAll('.slide').length;
+    setActive((current + dir + n) % n);
+  }
+
+  function toggleComment(trigger) {
+    const form = trigger.nextElementSibling;
+    const isOpen = trigger.classList.contains('open');
+    trigger.classList.toggle('open');
+    form.style.display = isOpen ? 'none' : 'block';
+  }
+</script>
+
+</body>
+</html>

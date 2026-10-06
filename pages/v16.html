@@ -7,9 +7,8 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* v14 — Dark editorial base. No "Chicago Construction Tracker" brand text.
-       All 8 categories always visible with matching section header treatment.
-       Inline comment/concern widget on timeline project rows. */
+    /* v16 — Dark editorial base (like v14) + completed projects slideshow.
+       Timeline agency/date labels are in the .tl-project column, not overlapping bars. */
 
     body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff; color: #0D1F35; }
 
@@ -48,7 +47,6 @@
     .split-section { background: #F2F5F9; border-top: 1px solid #DDE4EE; }
     .split-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; }
 
-    /* Shared tag — dark variant for left (blue), red for right */
     .section-tag-blue { display: inline-flex; background: #EEF5FB; border: 1px solid #C8DFF0; color: #0076C0; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.6rem; margin-bottom: 0.85rem; }
     .section-tag-red { display: inline-flex; background: rgba(227,24,55,0.08); border: 1px solid rgba(227,24,55,0.2); color: #E31837; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.6rem; margin-bottom: 0.85rem; }
 
@@ -68,7 +66,7 @@
     .split-feedback h2 { font-size: 1rem; font-weight: 800; color: #0D1F35; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
     .split-feedback .section-sub { font-size: 0.75rem; color: #6B88A8; line-height: 1.6; margin-bottom: 1.1rem; }
 
-    .feedback-impact-row { display: flex; gap: 0; border: 1px solid #DDE4EE; margin-bottom: 1.1rem; }
+    .feedback-impact-row { display: flex; border: 1px solid #DDE4EE; margin-bottom: 1.1rem; }
     .fi-stat { flex: 1; padding: 0.65rem 0.75rem; border-right: 1px solid #DDE4EE; text-align: center; }
     .fi-stat:last-child { border-right: none; }
     .fi-n { display: block; font-size: 1rem; font-weight: 800; color: #0076C0; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.15rem; }
@@ -85,13 +83,185 @@
     .form-submit:hover { background: #005fa3; }
     .form-note { font-size: 0.58rem; color: #aaa; margin-top: 0.55rem; line-height: 1.5; }
 
-    /* FEATURED PROJECTS — TIMELINE WITH COMMENT WIDGET */
+    /* ── COMPLETED PROJECTS SLIDESHOW — dark edition ── */
+    .completed-section {
+      background: #071523;
+      padding: 3rem 5vw;
+      border-top: 1px solid #0D2740;
+    }
+
+    .completed-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .completed-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    .completed-header-left {}
+
+    .completed-tag {
+      display: inline-flex;
+      background: rgba(227,24,55,0.12);
+      border: 1px solid rgba(227,24,55,0.25);
+      color: #E31837;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .completed-header-left h2 {
+      font-family: 'Georgia', serif;
+      font-size: 1.35rem;
+      font-style: italic;
+      font-weight: normal;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .completed-header a {
+      font-size: 0.67rem;
+      color: rgba(255,255,255,0.28);
+      text-decoration: none;
+      margin-bottom: 0.15rem;
+    }
+
+    .completed-header a:hover { color: rgba(255,255,255,0.6); }
+
+    /* Slideshow */
+    .slideshow { position: relative; }
+
+    .slides {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .slide {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+
+    .slide:hover img { transform: scale(1.04); }
+
+    .slide.dimmed { opacity: 0.38; }
+
+    .slide-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(5,13,25,0.94));
+      padding: 2.5rem 1rem 1rem;
+    }
+
+    .slide-status {
+      display: inline-block;
+      background: #22A05A;
+      color: #fff;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.45rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .slide-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.22rem;
+    }
+
+    .slide-meta {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Active slide indicator — thin red top border */
+    .slide.active::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: #E31837;
+    }
+
+    /* Detail panel */
+    .slide-detail {
+      background: #0B1E34;
+      border: 1px solid #132840;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .detail-label { font-size: 0.52rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #2A4060; margin-bottom: 0.3rem; }
+    .detail-value { font-size: 0.85rem; color: #fff; font-weight: 600; }
+
+    /* Nav dots */
+    .slideshow-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.1rem;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .dot.active { background: #E31837; }
+
+    /* Arrows */
+    .slide-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .slide-arrow:hover { background: rgba(227,24,55,0.3); color: #fff; }
+    .slide-arrow.prev { left: -44px; }
+    .slide-arrow.next { right: -44px; }
+
+    /* FEATURED PROJECTS — TIMELINE */
     .projects-section { padding: 2.5rem 5vw; max-width: 1100px; margin: 0 auto; }
     .projects-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #0D1F35; }
     .projects-header h2 { font-size: 1rem; font-weight: 700; color: #0D1F35; }
     .projects-header a { font-size: 0.68rem; color: #0076C0; text-decoration: none; }
 
-    /* Month scale */
     .timeline-scale { display: grid; grid-template-columns: 210px 1fr auto; gap: 0 1.25rem; margin-bottom: 0.5rem; align-items: end; }
     .scale-label { font-size: 0.54rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #ccc; }
     .month-track { position: relative; height: 16px; }
@@ -99,26 +269,25 @@
     .month-tick { position: absolute; top: 0; width: 1px; height: 7px; background: #eee; transform: translateX(-50%); }
     .scale-done { font-size: 0.54rem; color: #ccc; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; width: 3rem; text-align: right; }
 
-    /* Each project row — expandable */
     .tl-entry { border-bottom: 1px solid #f0f0f0; }
 
-    .tl-row { display: grid; grid-template-columns: 210px 1fr auto; gap: 0 1.25rem; align-items: center; padding: 0.85rem 0; cursor: pointer; }
-    .tl-row:hover .tl-name { color: #0076C0; }
+    .tl-row { display: grid; grid-template-columns: 210px 1fr auto; gap: 0 1.25rem; align-items: center; padding: 0.85rem 0; }
 
     .tl-project { display: flex; flex-direction: column; gap: 0.18rem; padding-right: 0.75rem; }
     .tl-cat { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; }
-    .tl-name { font-size: 0.82rem; color: #0D1F35; font-weight: 600; line-height: 1.25; transition: color 0.12s; }
+    .tl-name { font-size: 0.82rem; color: #0D1F35; font-weight: 600; line-height: 1.25; }
     .tl-loc { font-size: 0.6rem; color: #bbb; }
+    /* Date/agency label sits below loc — no overlap with bars */
+    .tl-agency { font-size: 0.52rem; font-style: italic; color: #bbb; white-space: nowrap; }
 
-    .tl-bar-wrap { position: relative; height: 26px; }
+    .tl-bar-wrap { position: relative; height: 20px; }
     .tl-bg { position: absolute; top: 50%; transform: translateY(-50%); height: 10px; background: #F0F4F8; border-radius: 2px; }
     .tl-fill { position: absolute; top: 50%; transform: translateY(-50%); height: 10px; border-radius: 2px; }
     .tl-fill.blue { background: #0076C0; }
     .tl-fill.amber { background: #F59E0B; }
     .tl-fill.green { background: #22A05A; }
     .tl-fill.muted { background: #C0D0E0; }
-    .tl-today { position: absolute; top: 0; width: 1.5px; height: 26px; background: #E31837; opacity: 0.4; }
-    .tl-agency { font-size: 0.52rem; font-style: italic; color: #bbb; white-space: nowrap; }
+    .tl-today { position: absolute; top: 0; width: 1.5px; height: 20px; background: #E31837; opacity: 0.45; }
 
     .tl-pct-cell { width: 3rem; text-align: right; }
     .tl-pct { font-size: 0.68rem; font-weight: 700; color: #0D1F35; display: block; }
@@ -127,7 +296,7 @@
     .tl-status.ps { color: #F59E0B; }
     .tl-status.ns { color: #8BA0BC; }
 
-    /* Comment widget on timeline row */
+    /* Comment widget */
     .tl-comment-trigger { display: flex; align-items: center; gap: 0.4rem; padding: 0 0 0.6rem; cursor: pointer; font-size: 0.63rem; color: #bbb; transition: color 0.12s; user-select: none; }
     .tl-comment-trigger:hover { color: #0076C0; }
     .tl-comment-trigger.open { color: #0076C0; }
@@ -253,7 +422,68 @@
   </div>
 </div>
 
-<!-- FEATURED PROJECTS — TIMELINE WITH COMMENT WIDGET -->
+<!-- ── COMPLETED PROJECTS SLIDESHOW — dark edition ── -->
+<section class="completed-section">
+  <div class="completed-inner">
+    <div class="completed-header">
+      <div class="completed-header-left">
+        <div class="completed-tag">Recently Completed</div>
+        <h2>Built for Chicago.</h2>
+      </div>
+      <a href="#">View all 389 completed projects →</a>
+    </div>
+
+    <div class="slideshow">
+      <div class="slide-arrow prev" onclick="shiftSlide(-1)">‹</div>
+      <div class="slides" id="slides">
+
+        <div class="slide active" onclick="setActive(0)">
+          <img src="../ChicagoRiverWalk.jpg" alt="Chicago Riverwalk Extension" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Chicago Riverwalk Phase III Extension</div>
+            <div class="slide-meta">River North &nbsp;·&nbsp; Completed Sep 2025</div>
+          </div>
+        </div>
+
+        <div class="slide dimmed" onclick="setActive(1)">
+          <img src="../DamenStop.jpg" alt="Damen Green Line Station Renovation" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Damen Green Line Station Renovation</div>
+            <div class="slide-meta">East Garfield Park &nbsp;·&nbsp; Completed Jul 2025</div>
+          </div>
+        </div>
+
+        <div class="slide dimmed" onclick="setActive(2)">
+          <img src="../MontroseBirdSanctuary.jpg" alt="Montrose Bird Sanctuary Restoration" />
+          <div class="slide-caption">
+            <span class="slide-status">Completed</span>
+            <div class="slide-title">Montrose Bird Sanctuary Restoration</div>
+            <div class="slide-meta">Uptown &nbsp;·&nbsp; Completed Aug 2025</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-arrow next" onclick="shiftSlide(1)">›</div>
+    </div>
+
+    <div class="slide-detail" id="slideDetail">
+      <div><div class="detail-label">Agency</div><div class="detail-value" id="detailAgency">Chicago DPD / IDOT</div></div>
+      <div><div class="detail-label">Contract Value</div><div class="detail-value" id="detailCost">$18.4M</div></div>
+      <div><div class="detail-label">Duration</div><div class="detail-value" id="detailDuration">14 months</div></div>
+      <div><div class="detail-label">Ward</div><div class="detail-value" id="detailWard">42nd Ward</div></div>
+    </div>
+
+    <div class="slideshow-dots">
+      <div class="dot active" onclick="setActive(0)"></div>
+      <div class="dot" onclick="setActive(1)"></div>
+      <div class="dot" onclick="setActive(2)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PROJECTS — TIMELINE -->
 <div class="projects-section">
   <div class="projects-header">
     <h2>Featured projects — Oct 2025 through Jun 2026</h2>
@@ -277,7 +507,7 @@
   </div>
 
   <div class="tl-entry">
-    <div class="tl-row" onclick="toggleTlComment(this)">
+    <div class="tl-row">
       <div class="tl-project"><span class="tl-cat">Roads &amp; Pavement · CDOT</span><span class="tl-name">Milwaukee Ave Resurfacing</span><span class="tl-loc">Logan Square</span><span class="tl-agency">Est. end Dec 2025</span></div>
       <div class="tl-bar-wrap">
         <div class="tl-today" style="left:6.7%"></div>
@@ -286,15 +516,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">65%</span><span class="tl-status ip">Active</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span class="tl-trigger-arrow"></span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -308,15 +533,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">30%</span><span class="tl-status ip">Active</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -330,15 +550,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">80%</span><span class="tl-status ip">Active</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -352,15 +567,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">45%</span><span class="tl-status ps">Paused</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -374,15 +584,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">—</span><span class="tl-status ns">Pending</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -396,15 +601,10 @@
       </div>
       <div class="tl-pct-cell"><span class="tl-pct">55%</span><span class="tl-status ip">Active</span></div>
     </div>
-    <div class="tl-comment-trigger" onclick="toggleTlForm(this)">
-      <span>›</span><span>💬 Add a comment or concern about this project</span>
-    </div>
+    <div class="tl-comment-trigger" onclick="toggleTlForm(this)"><span class="tl-trigger-arrow">›</span><span>💬 Add a comment or concern about this project</span></div>
     <div class="tl-comment-form">
-      <textarea placeholder="Share what you observed or ask a question about this project…"></textarea>
-      <div class="tl-comment-row">
-        <input type="text" placeholder="Your name (optional)" />
-        <button>Submit</button>
-      </div>
+      <textarea placeholder="Share what you observed or ask a question…"></textarea>
+      <div class="tl-comment-row"><input type="text" placeholder="Your name (optional)" /><button>Submit</button></div>
     </div>
   </div>
 
@@ -420,10 +620,39 @@
 <footer>
   <span class="footer-brand">Chicago Builds</span>
   <div class="footer-stars"><span class="footer-star">✦</span><span class="footer-star">✦</span><span class="footer-star">✦</span><span class="footer-star">✦</span></div>
-  <span class="footer-right">City of Chicago · v14 — Split layout · Timeline · Comment widget</span>
+  <span class="footer-right">City of Chicago · v16 — Completed projects slideshow (dark)</span>
 </footer>
 
 <script>
+  const slideData = [
+    { agency: 'Chicago DPD / IDOT', cost: '$18.4M', duration: '14 months', ward: '42nd Ward' },
+    { agency: 'CTA / Chicago Capital Program', cost: '$31.2M', duration: '22 months', ward: '27th Ward' },
+    { agency: 'Chicago Park District', cost: '$4.8M', duration: '9 months', ward: '46th Ward' }
+  ];
+
+  let current = 0;
+
+  function setActive(idx) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+      s.classList.toggle('dimmed', i !== idx);
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    const d = slideData[idx];
+    document.getElementById('detailAgency').textContent = d.agency;
+    document.getElementById('detailCost').textContent = d.cost;
+    document.getElementById('detailDuration').textContent = d.duration;
+    document.getElementById('detailWard').textContent = d.ward;
+    current = idx;
+  }
+
+  function shiftSlide(dir) {
+    const n = document.querySelectorAll('.slide').length;
+    setActive((current + dir + n) % n);
+  }
+
   function toggleTlForm(trigger) {
     const form = trigger.nextElementSibling;
     const isOpen = trigger.classList.contains('open');
