@@ -149,62 +149,43 @@
     .project-card { background: #0060A8; border: 1px solid #004F8C; display: flex; flex-direction: column; }
     .card-body { padding: 1.2rem 1.2rem 1rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
     .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.4rem; }
+    .card-cat { font-size: 0.57rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
 
-    /* category: soft rose-red — echoes the flag without overwhelming */
-    .card-cat { font-size: 0.57rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #FFAAB5; }
-
-    /* status badges on blue background */
     .status-badge { font-size: 0.54rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.16rem 0.42rem; flex-shrink: 0; }
     .status-badge.ip { background: rgba(255,255,255,0.12); color: #A8F0C6; }
     .status-badge.ps { background: rgba(255,220,50,0.12); color: #FFD060; }
     .status-badge.ns { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.45); }
 
-    /* title: white — primary, clearest */
     .card-title { font-size: 0.87rem; font-weight: 700; color: #fff; line-height: 1.3; }
-
-    /* location: muted white */
     .card-loc { font-size: 0.67rem; color: rgba(255,255,255,0.55); }
-
-    /* meta: label in red tint, value in muted white */
     .card-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
     .card-meta-item { font-size: 0.6rem; color: rgba(255,255,255,0.45); }
-    .card-meta-item strong { color: #FFCDD3; }   /* light red for bold labels */
+    .card-meta-item strong { color: rgba(255,255,255,0.75); }
 
-    /* progress */
     .progress-wrap { background: rgba(0,0,0,0.25); height: 5px; border-radius: 2px; overflow: hidden; }
     .progress-fill { height: 100%; border-radius: 2px; }
-    .pf-blue { background: rgba(255,255,255,0.75); }   /* white bar on blue tile */
+    .pf-blue { background: rgba(255,255,255,0.75); }
     .pf-yellow { background: #F59E0B; }
     .pf-gray { background: rgba(255,255,255,0.2); }
 
-    /* footer row: date in deeper red tint, pct in bright white */
     .card-footer-row { display: flex; justify-content: space-between; align-items: center; }
-    .card-end { font-size: 0.58rem; color: #FF8A9A; }   /* warm red-pink date */
+    .card-end { font-size: 0.58rem; color: rgba(255,255,255,0.45); }
     .card-pct { font-size: 0.6rem; font-weight: 700; color: #fff; }
 
-    /* ── COMMENT WIDGET — civic blue tile version ── */
+    /* ── COMMENT WIDGET — clean, no side border ── */
     .card-comment-area { border-top: 1px solid rgba(255,255,255,0.1); }
-    .card-comment-trigger {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.75rem 1.2rem;
-      background: rgba(0,0,0,0.18);
-      cursor: pointer; user-select: none;
-      transition: background 0.15s;
-      border-left: 4px solid #E31837;  /* red accent on blue tile */
-    }
+    .card-comment-trigger { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.2rem; background: rgba(0,0,0,0.18); cursor: pointer; user-select: none; transition: background 0.15s; }
     .card-comment-trigger:hover { background: rgba(0,0,0,0.28); }
-    /* open state: red — strong Chicago flag pop against blue tile */
-    .card-comment-trigger.open { background: #E31837; border-left-color: #B01228; }
+    .card-comment-trigger.open { background: rgba(0,0,0,0.32); }
     .trigger-left { display: flex; align-items: center; gap: 0.5rem; }
     .trigger-icon { font-size: 1rem; line-height: 1; }
     .trigger-text { display: flex; flex-direction: column; gap: 0.1rem; }
-    .trigger-main { font-size: 0.72rem; font-weight: 700; color: #fff; line-height: 1.2; transition: color 0.15s; }
-    .trigger-sub { font-size: 0.59rem; color: rgba(255,255,255,0.6); transition: color 0.15s; }
-    .card-comment-trigger.open .trigger-sub { color: rgba(255,255,255,0.8); }
-    .trigger-arrow { font-size: 1rem; color: #E31837; font-weight: 700; transition: transform 0.15s, color 0.15s; }
-    .card-comment-trigger.open .trigger-arrow { transform: rotate(90deg); color: #fff; }
+    .trigger-main { font-size: 0.72rem; font-weight: 700; color: #fff; line-height: 1.2; }
+    .trigger-sub { font-size: 0.59rem; color: rgba(255,255,255,0.55); }
+    .trigger-arrow { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 700; transition: transform 0.15s; }
+    .card-comment-trigger.open .trigger-arrow { transform: rotate(90deg); }
 
-    .card-comment-form { display: none; padding: 0.9rem 1.2rem 1rem; background: rgba(0,0,0,0.22); border-top: 1px solid rgba(255,255,255,0.08); border-left: 4px solid #E31837; }
+    .card-comment-form { display: none; padding: 0.9rem 1.2rem 1rem; background: rgba(0,0,0,0.22); border-top: 1px solid rgba(255,255,255,0.08); }
     .card-comment-form textarea { width: 100%; border: 1.5px solid rgba(255,255,255,0.15); padding: 0.6rem 0.7rem; font-size: 0.76rem; font-family: inherit; color: #fff; resize: none; height: 62px; outline: none; transition: border-color 0.12s; margin-bottom: 0.5rem; background: rgba(0,0,0,0.2); }
     .card-comment-form textarea:focus { border-color: rgba(255,255,255,0.5); }
     .card-comment-form textarea::placeholder { color: rgba(255,255,255,0.3); }
@@ -212,8 +193,8 @@
     .comment-form-row input { flex: 1; border: 1.5px solid rgba(255,255,255,0.15); padding: 0.45rem 0.6rem; font-size: 0.72rem; font-family: inherit; color: #fff; outline: none; background: rgba(0,0,0,0.2); }
     .comment-form-row input:focus { border-color: rgba(255,255,255,0.5); }
     .comment-form-row input::placeholder { color: rgba(255,255,255,0.3); }
-    .comment-form-row button { background: #E31837; color: #fff; border: none; padding: 0.45rem 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; flex-shrink: 0; transition: background 0.12s; }
-    .comment-form-row button:hover { background: #B01228; }
+    .comment-form-row button { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 0.45rem 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; flex-shrink: 0; transition: background 0.12s; }
+    .comment-form-row button:hover { background: rgba(255,255,255,0.25); }
 
     /* ── FOOTER ── */
     footer { background: #fff; border-top: 1px solid #DDE4EE; padding: 1.6rem 5vw; display: flex; justify-content: space-between; align-items: center; }
