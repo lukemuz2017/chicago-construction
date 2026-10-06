@@ -7,7 +7,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* v21 — v20 structure/content, v19 civic-blue color palette throughout. */
+    /* v21 — v20 structure/content, v19 civic-blue color palette. Colors only. */
 
     body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F0F4F8; color: #1a2633; }
 
@@ -25,31 +25,24 @@
     .header-search button { background: #0076C0; border: none; color: #fff; padding: 0 0.65rem; font-size: 0.6rem; cursor: pointer; font-weight: 700; }
 
     /* ── HERO ── */
-    .hero { background: linear-gradient(155deg, #0055A5 0%, #0076C0 50%, #0096E0 100%); padding: 3.5rem 5vw 4.5rem; position: relative; overflow: hidden; }
+    .hero { background: linear-gradient(155deg, #0055A5 0%, #0076C0 50%, #0096E0 100%); position: relative; overflow: hidden; display: flex; align-items: center; }
     .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px); }
-    .hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 380px; gap: 3.5rem; align-items: center; }
-    .hero-left h1 { font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 0.9rem; }
-    .hero-left p { font-size: 0.92rem; color: rgba(255,255,255,0.65); line-height: 1.65; max-width: 400px; }
-    .hero-card { background: #fff; border-radius: 3px; padding: 1.6rem; box-shadow: 0 16px 48px rgba(0,0,0,0.2); }
-    .card-label { font-size: 0.57rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0076C0; margin-bottom: 0.5rem; }
-    .card-title { font-size: 0.95rem; font-weight: 700; color: #1a2633; margin-bottom: 0.3rem; }
-    .card-sub { font-size: 0.72rem; color: #8BA0BC; margin-bottom: 1.1rem; }
-    .search-row { display: flex; border: 1.5px solid #DDE4EE; overflow: hidden; margin-bottom: 0.85rem; }
-    .search-row input { flex: 1; padding: 0.75rem 0.85rem; border: none; font-size: 0.82rem; color: #1a2633; outline: none; }
-    .search-row input::placeholder { color: #ccc; }
-    .search-row button { background: #0076C0; color: #fff; border: none; padding: 0.75rem 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
-    .quick-links { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .quick-link { font-size: 0.62rem; color: #0076C0; background: #EEF5FB; padding: 0.22rem 0.55rem; text-decoration: none; }
+    .hero-inner { padding: 3.5rem 5vw 4rem; position: relative; z-index: 2; width: 100%; max-width: 760px; }
+    .eyebrow { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.7rem; }
+    .hero h1 { font-family: 'Georgia', serif; font-size: clamp(1.5rem, 3.2vw, 2.4rem); font-style: italic; font-weight: normal; color: #fff; line-height: 1.2; margin-bottom: 1.4rem; }
+    .hero-search { display: flex; max-width: 520px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+    .hero-search input { flex: 1; padding: 0.9rem 1rem; border: none; font-size: 0.88rem; color: #1a2633; outline: none; }
+    .hero-search input::placeholder { color: #aaa; }
+    .hero-search button { background: #0076C0; color: #fff; border: none; padding: 0.9rem 1.25rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; white-space: nowrap; border-left: 2px solid rgba(255,255,255,0.2); }
 
     /* ── STATS ── */
-    .stats { background: #fff; border-bottom: 1px solid #DDE4EE; }
-    .stats-inner { max-width: 1100px; margin: 0 auto; display: flex; padding: 0 5vw; }
-    .stat { flex: 1; padding: 1.4rem 0.75rem; border-right: 1px solid #DDE4EE; text-align: center; }
+    .stats { background: #fff; display: flex; border-top: 1px solid #DDE4EE; border-bottom: 1px solid #DDE4EE; }
+    .stat { flex: 1; padding: 1.35rem 0.75rem; text-align: center; border-right: 1px solid #DDE4EE; }
     .stat:last-child { border-right: none; }
-    .stat-n { display: block; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; color: #0076C0; margin-bottom: 0.25rem; }
-    .stat-n.dark { color: #1a2633; }
+    .stat-n { display: block; font-size: 1.65rem; font-weight: 800; color: #0076C0; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.25rem; }
+    .stat-n.accent { color: #0076C0; }
     .stat-n.red { color: #E31837; }
-    .stat-l { font-size: 0.58rem; color: #8BA0BC; text-transform: uppercase; letter-spacing: 0.1em; }
+    .stat-l { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.14em; color: #8BA0BC; }
 
     /* ── SPLIT SECTION ── */
     .split-section { background: #fff; border-top: 1px solid #DDE4EE; }
@@ -96,7 +89,7 @@
     .completed-inner { max-width: 1100px; margin: 0 auto; }
     .completed-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1.75rem; }
     .completed-tag { display: inline-flex; background: rgba(0,118,192,0.2); border: 1px solid rgba(0,118,192,0.4); color: #5BB8F5; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.6rem; margin-bottom: 0.6rem; }
-    .completed-header-left h2 { font-size: 1.25rem; font-weight: 800; font-family: inherit; color: #fff; letter-spacing: -0.02em; }
+    .completed-header-left h2 { font-family: 'Georgia', serif; font-size: 1.35rem; font-style: italic; font-weight: normal; color: #fff; letter-spacing: -0.01em; }
     .completed-header a { font-size: 0.67rem; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 0.15rem; }
     .completed-header a:hover { color: #5BB8F5; }
 
@@ -148,7 +141,7 @@
     .tl-agency { font-size: 0.52rem; font-style: italic; color: #8BA0BC; white-space: nowrap; }
 
     .tl-bar-wrap { position: relative; height: 20px; }
-    .tl-bg { position: absolute; top: 50%; transform: translateY(-50%); height: 10px; background: #DDE4EE; border-radius: 2px; }
+    .tl-bg { position: absolute; top: 50%; transform: translateY(-50%); height: 10px; background: #E8EDF4; border-radius: 2px; }
     .tl-fill { position: absolute; top: 50%; transform: translateY(-50%); height: 10px; border-radius: 2px; }
     .tl-fill.blue { background: #0076C0; }
     .tl-fill.amber { background: #F59E0B; }
@@ -169,7 +162,7 @@
     .tl-trigger-arrow { font-size: 0.52rem; transition: transform 0.15s; }
     .tl-comment-trigger.open .tl-trigger-arrow { transform: rotate(90deg); }
 
-    .tl-comment-form { display: none; background: #F8FAFD; border: 1px solid #DDE4EE; padding: 0.85rem 1rem; margin-bottom: 0.75rem; }
+    .tl-comment-form { display: none; background: #F4F8FF; border: 1px solid #C8DFF0; padding: 0.85rem 1rem; margin-bottom: 0.75rem; }
     .tl-comment-form textarea { width: 100%; border: 1.5px solid #DDE4EE; padding: 0.5rem 0.65rem; font-size: 0.74rem; font-family: inherit; color: #1a2633; resize: none; height: 52px; outline: none; transition: border-color 0.12s; margin-bottom: 0.45rem; }
     .tl-comment-form textarea:focus { border-color: #0076C0; }
     .tl-comment-form textarea::placeholder { color: #ccc; }
@@ -217,36 +210,21 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-left">
-      <h1>Track every repair, closure,<br>and build across the city.</h1>
-      <p>From water main work on the South Side to CTA upgrades downtown — organized, searchable, and updated daily.</p>
-    </div>
-    <div class="hero-card">
-      <p class="card-label">Find a project</p>
-      <p class="card-title">What's happening near you?</p>
-      <p class="card-sub">Search by street, neighborhood, ZIP, or project type.</p>
-      <div class="search-row">
-        <input type="text" placeholder="Street, neighborhood, or ZIP code…" />
-        <button>Search</button>
-      </div>
-      <div class="quick-links">
-        <a class="quick-link" href="#">The Loop</a>
-        <a class="quick-link" href="#">Wicker Park</a>
-        <a class="quick-link" href="#">South Side</a>
-        <a class="quick-link" href="#">Red Line</a>
-      </div>
+    <p class="eyebrow">City of Chicago &nbsp;·&nbsp; Public Works &amp; Infrastructure</p>
+    <h1>Track every repair, closure,<br>and build across the city.</h1>
+    <div class="hero-search">
+      <input type="text" placeholder="Street, neighborhood, or ZIP code…" />
+      <button>Search</button>
     </div>
   </div>
 </section>
 
 <div class="stats">
-  <div class="stats-inner">
-    <div class="stat"><span class="stat-n">1,247</span><span class="stat-l">Active Projects</span></div>
-    <div class="stat"><span class="stat-n dark">28,400+</span><span class="stat-l">Union Workers</span></div>
-    <div class="stat"><span class="stat-n red">389</span><span class="stat-l">Completed This Year</span></div>
-    <div class="stat"><span class="stat-n dark">$2.4B</span><span class="stat-l">Active Contracts</span></div>
-    <div class="stat"><span class="stat-n">77</span><span class="stat-l">Neighborhoods</span></div>
-  </div>
+  <div class="stat"><span class="stat-n accent">1,247</span><span class="stat-l">Active Projects</span></div>
+  <div class="stat"><span class="stat-n">28,400+</span><span class="stat-l">Union Workers</span></div>
+  <div class="stat"><span class="stat-n red">389</span><span class="stat-l">Completed This Year</span></div>
+  <div class="stat"><span class="stat-n">$2.4B</span><span class="stat-l">Active Contracts</span></div>
+  <div class="stat"><span class="stat-n">77</span><span class="stat-l">Neighborhoods</span></div>
 </div>
 
 <div class="split-section">
@@ -480,7 +458,7 @@
 <footer>
   <span class="footer-brand">Chicago Builds</span>
   <div class="footer-stars"><span class="footer-star">✦</span><span class="footer-star">✦</span><span class="footer-star">✦</span><span class="footer-star">✦</span></div>
-  <span class="footer-right">City of Chicago · v21 — Dark structure, civic blue palette</span>
+  <span class="footer-right">City of Chicago · v21 — v20 structure, civic blue palette</span>
 </footer>
 
 <script>
@@ -506,7 +484,7 @@
   }
 
   function shiftSlide(dir) {
-    setActive((current + dir + slideData.length) % slideData.length);
+    setActive((current + dir + document.querySelectorAll('.slide').length) % document.querySelectorAll('.slide').length);
   }
 
   function toggleTlForm(trigger) {
